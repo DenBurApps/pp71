@@ -28,6 +28,13 @@ class $AssetsIconsGen {
   SvgGenImage get statistics =>
       const SvgGenImage('assets/icons/Statistics.svg');
 
+  /// File path: assets/icons/Tumer.svg
+  SvgGenImage get tumer => const SvgGenImage('assets/icons/Tumer.svg');
+
+  /// File path: assets/icons/User_alt_light.svg
+  SvgGenImage get userAltLight =>
+      const SvgGenImage('assets/icons/User_alt_light.svg');
+
   /// File path: assets/icons/arrow-down.svg
   SvgGenImage get arrowDown => const SvgGenImage('assets/icons/arrow-down.svg');
 
@@ -37,12 +44,18 @@ class $AssetsIconsGen {
   /// File path: assets/icons/edit.svg
   SvgGenImage get edit => const SvgGenImage('assets/icons/edit.svg');
 
+  /// File path: assets/icons/energy.svg
+  SvgGenImage get energy => const SvgGenImage('assets/icons/energy.svg');
+
   /// File path: assets/icons/esc.svg
   SvgGenImage get esc => const SvgGenImage('assets/icons/esc.svg');
 
   /// File path: assets/icons/escblacksvg.svg
   SvgGenImage get escblacksvg =>
       const SvgGenImage('assets/icons/escblacksvg.svg');
+
+  /// File path: assets/icons/fair.svg
+  SvgGenImage get fair => const SvgGenImage('assets/icons/fair.svg');
 
   /// File path: assets/icons/plus.svg
   SvgGenImage get plus => const SvgGenImage('assets/icons/plus.svg');
@@ -59,11 +72,15 @@ class $AssetsIconsGen {
         phone,
         settingLine,
         statistics,
+        tumer,
+        userAltLight,
         arrowDown,
         arrowR,
         edit,
+        energy,
         esc,
         escblacksvg,
+        fair,
         plus,
         plusBig,
         trash

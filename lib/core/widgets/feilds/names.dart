@@ -88,15 +88,17 @@ class _NamesFieldWidgetState extends State<NamesFieldWidget> {
 
 class DescriptionFieldWidget extends StatefulWidget {
   const DescriptionFieldWidget({
-    super.key,
+    Key? key,
     required this.controller,
     required this.titleHint,
     this.onChanged,
-  });
+    this.readOnly = false, // Добавленный параметр для запрета ввода текста
+  }) : super(key: key);
 
   final TextEditingController controller;
   final String titleHint;
   final void Function(String)? onChanged;
+  final bool readOnly; // Добавленный параметр для запрета ввода текста
 
   @override
   State<DescriptionFieldWidget> createState() => _DescriptionFieldWidgetState();
@@ -116,6 +118,7 @@ class _DescriptionFieldWidgetState extends State<DescriptionFieldWidget> {
       ),
       height: 150,
       child: TextFormField(
+        readOnly: widget.readOnly, // Устанавливаем значение readOnly из параметра виджета
         cursorHeight: 15,
         style: Theme.of(context).textTheme.bodyLarge,
         autofocus: true,
@@ -133,9 +136,6 @@ class _DescriptionFieldWidgetState extends State<DescriptionFieldWidget> {
               .bodyLarge!
               .copyWith(color: Colors.red),
           floatingLabelBehavior: FloatingLabelBehavior.never,
-          // fillColor:
-          //     Theme.of(context).colorScheme.onBackground.withOpacity(0.1),
-          // filled: true,
           errorBorder: InputBorder.none,
           focusedErrorBorder: InputBorder.none,
           focusedBorder: const OutlineInputBorder(

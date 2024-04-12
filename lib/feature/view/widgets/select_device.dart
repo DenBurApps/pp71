@@ -8,6 +8,7 @@ import 'package:pp71/core/utils/email_helper.dart';
 import 'package:pp71/core/widgets/app_button.dart';
 import 'package:pp71/core/widgets/feilds/names.dart';
 import 'package:pp71/core/widgets/icon_button.dart';
+import 'package:pp71/feature/view/home/pages/orders_view.dart';
 
 class SelectDeviceWidget extends StatefulWidget {
   final List list;
@@ -66,7 +67,6 @@ class _SelectDeviceWidgetState extends State<SelectDeviceWidget> {
                       onPressed: () async {
                         widget.onPressed.call(selectedIndex!);
                         Navigator.pop(context);
-                        
                       },
                       label: 'Add',
                     )
@@ -79,7 +79,6 @@ class _SelectDeviceWidgetState extends State<SelectDeviceWidget> {
                   list: widget.list,
                   onPressed: (index) {
                     setState(() {
-                      
                       selectedIndex = index;
                     });
                   })),
@@ -182,6 +181,162 @@ class DeviceContainer extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class OrderContainer extends StatelessWidget {
+  final Function() onPressed;
+  final List<String> listImageFile;
+  final String name;
+  final String nameDevice;
+  final String date;
+
+  final bool selected;
+  const OrderContainer(
+      {super.key,
+      required this.onPressed,
+      required this.selected,
+      required this.listImageFile,
+      required this.name,
+      required this.nameDevice,
+      required this.date});
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoButton(
+      onPressed: listImageFile.isNotEmpty
+          ? null
+          : () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => OrdersListView()));
+            },
+      padding: EdgeInsets.only(bottom: 20),
+      child: Container(
+          height: 220,
+          width: MediaQuery.of(context).size.width,
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+          decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primaryContainer,
+              borderRadius: const BorderRadius.all(Radius.circular(30))),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(nameDevice,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.displayMedium!.copyWith(
+                      color: Theme.of(context).colorScheme.background)),
+              listImageFile.isNotEmpty
+                  ? Expanded(
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        padding: EdgeInsets.zero,
+                        scrollDirection: Axis.horizontal,
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: listImageFile.length,
+                        itemBuilder: (context, index) => Stack(
+                          children: [
+                            Container(
+                              height: 100,
+                              width: 100,
+                              margin: const EdgeInsets.only(left: 10),
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(15)),
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onBackground
+                                    .withOpacity(0.1),
+                              ),
+                              // child: Center(
+                              //   child: ClipRRect(
+                              //       borderRadius:
+                              //           const BorderRadius.all(
+                              //               Radius.circular(15)),
+                              //       child: Image.file(
+                              //         File(_listImageFile[index]),
+                              //         fit: BoxFit.fill,
+                              //         height: 100,
+                              //         width: 100,
+                              //       )),
+                              // ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  : Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.image_not_supported,
+                            size: 35,
+                            color: Theme.of(context).colorScheme.background,
+                          ),
+                          const SizedBox(height: 10),
+                          Text('No Image',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge!
+                                  .copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .background)),
+                        ],
+                      ),
+                    ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    width: 0.3 * MediaQuery.of(context).size.width,
+                    child: Row(
+                      children: [
+                        Assets.icons.userAltLight.svg(),
+                        SizedBox(width: 5),
+                        Expanded(
+                          child: Text(name,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelMedium!
+                                  .copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .background)),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    width: 0.3 * MediaQuery.of(context).size.width,
+                    child: Row(
+                      children: [
+                        Assets.icons.tumer.svg(),
+                        SizedBox(width: 5),
+                        Expanded(
+                          child: Text(date,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelMedium!
+                                  .copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .background)),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              )
+            ],
+          )),
     );
   }
 }
