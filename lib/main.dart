@@ -12,6 +12,8 @@ import 'package:get_it/get_it.dart';
 import 'package:pp71/core/config/injection.dart';
 import 'package:pp71/core/routes/routes.dart';
 import 'package:pp71/core/theme/theme.dart';
+import 'package:pp71/feature/controller/client_bloc/client_bloc.dart';
+import 'package:pp71/feature/controller/order_bloc/order_bloc.dart';
 import 'package:pp71/feature/view/home/pages/customers_view.dart';
 import 'package:pp71/feature/view/home/pages/home_view.dart';
 import 'package:pp71/feature/view/home/pages/new_cleint.dart';
@@ -58,11 +60,12 @@ class MealPlaner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return 
-    // MultiBlocProvider(
-    //   providers: [
-    //     // BlocProvider(create: (context) => GetIt.instance<ItemBloc>()),
-    //   ],
-    //   child: 
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => GetIt.instance<CleintBloc>()),
+        BlocProvider(create: (context) => GetIt.instance<OrderBloc>()),
+      ],
+      child: 
       ThemeProvider(
         defaultThemeId: DefaultTheme.dark.id,
         saveThemesOnChange: true,
@@ -88,7 +91,7 @@ class MealPlaner extends StatelessWidget {
             ),
           ),
         ),
-      // ),
+      ),
     );
   }
 }

@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -12,10 +13,14 @@ import 'package:path_provider/path_provider.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
 import 'package:pp71/core/generated/assets.gen.dart';
+import 'package:pp71/core/models/cleint.dart';
+import 'package:pp71/core/models/order.dart';
 import 'package:pp71/core/utils/show_custom_snack_bar.dart';
 import 'package:pp71/core/widgets/app_button.dart';
 import 'package:pp71/core/widgets/feilds/names.dart';
 import 'package:pp71/core/widgets/icon_button.dart';
+import 'package:pp71/feature/controller/order_bloc/order_bloc.dart';
+import 'package:pp71/feature/view/home/pages/home_view.dart';
 import 'package:pp71/feature/view/home/pages/new_cleint.dart';
 import 'package:pp71/feature/view/home/pages/new_cleint2.dart';
 import 'package:pp71/feature/view/widgets/select_device.dart';
@@ -25,7 +30,17 @@ import 'package:table_calendar/table_calendar.dart';
 // ignore: must_be_immutable
 class NewOrderSecondView extends StatefulWidget {
   final bool isBack;
-  const NewOrderSecondView({super.key, required this.isBack});
+  final String device;
+  final String? decs;
+  final Cleint cleint;
+
+  const NewOrderSecondView(
+      {super.key,
+      required this.isBack,
+      required this.device,
+       required this.cleint,
+      this.decs,
+    });
 
   @override
   State<NewOrderSecondView> createState() => _NewOrderSecondViewState();
@@ -77,32 +92,24 @@ class _NewOrderSecondViewState extends State<NewOrderSecondView> {
         child: AppButton(
           isActive: _selectedDay1 != null || _selectedDay2 != null,
           onPressed: () {
-            if (_selectedDay1 != null || _selectedDay2 != null) {
-              if (_selectedDay2 != null) {
+            if (_selectedDay1 != null && _selectedDay2 != null) {
+              
                 if (_selectedDay1!.isBefore(_selectedDay2!)) {
-                  
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (context) => NewCleintSecondView(
-                  //               isBack: widget.isBack,
-                  //               name: deviceController.text,
-                  //               surName: surNameController.text,
-                  //             )));
+                  BlocProvider.of<OrderBloc>(context).add(AddOrder(
+                      model: Order(
+                          client: widget.cleint,
+                          device: widget.device,
+                          description: widget.decs,
+                          startTime: _selectedDay1!,
+                          endTime:  _selectedDay2!,
+                          photos: [])));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => Homeview()));
                 } else {
                   showCustomSnackBar(context,
                       'The start date you choose must be before the end date. Please correct the selected dates.');
                 }
-              } else {
-                // Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //         builder: (context) => NewCleintSecondView(
-                //               isBack: widget.isBack,
-                //               name: deviceController.text,
-                //               surName: surNameController.text,
-                //             )));
-              }
+             
             } else {
               showCustomSnackBar(context, 'Please select a date');
             }
@@ -278,7 +285,7 @@ class _NewOrderSecondViewState extends State<NewOrderSecondView> {
                                       lastDay: _lastDay,
                                       onDaySelected: (selectedDay, focusedDay) {
                                         setState(() {
-                                          _selectedDay1 = DateTime(
+                                          _selectedDay2 = DateTime(
                                             year ?? _selectedDay2!.year,
                                             mounth ?? _selectedDay2!.month,
                                             _focusedDay2.day,

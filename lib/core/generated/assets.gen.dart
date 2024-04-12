@@ -41,6 +41,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/arrowR.svg
   SvgGenImage get arrowR => const SvgGenImage('assets/icons/arrowR.svg');
 
+  /// File path: assets/icons/boxempty.svg
+  SvgGenImage get boxempty => const SvgGenImage('assets/icons/boxempty.svg');
+
   /// File path: assets/icons/edit.svg
   SvgGenImage get edit => const SvgGenImage('assets/icons/edit.svg');
 
@@ -76,6 +79,7 @@ class $AssetsIconsGen {
         userAltLight,
         arrowDown,
         arrowR,
+        boxempty,
         edit,
         energy,
         esc,

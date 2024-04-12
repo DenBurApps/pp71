@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import 'package:pp71/core/generated/assets.gen.dart';
+import 'package:pp71/core/models/cleint.dart';
+import 'package:pp71/core/models/order.dart';
 import 'package:pp71/core/utils/email_helper.dart';
 import 'package:pp71/core/widgets/app_button.dart';
 import 'package:pp71/core/widgets/feilds/names.dart';
@@ -11,13 +13,14 @@ import 'package:pp71/core/widgets/icon_button.dart';
 import 'package:pp71/feature/view/home/pages/orders_view.dart';
 
 class SelectDeviceWidget extends StatefulWidget {
-  final List list;
-  final Function(int) onPressed;
 
+  final Function(int) onPressed;
+  final List<Cleint> cleints;
   const SelectDeviceWidget({
     super.key,
-    required this.list,
+
     required this.onPressed,
+    required this.cleints,
   });
 
   @override
@@ -76,9 +79,11 @@ class _SelectDeviceWidgetState extends State<SelectDeviceWidget> {
           SizedBox(height: 20),
           Expanded(
               child: GridCleint(
-                  list: widget.list,
+                  cleint: widget.cleints,
+                  
                   onPressed: (index) {
                     setState(() {
+                      
                       selectedIndex = index;
                     });
                   })),
@@ -89,12 +94,14 @@ class _SelectDeviceWidgetState extends State<SelectDeviceWidget> {
 }
 
 class GridCleint extends StatefulWidget {
-  final List list;
+
   final Function(int) onPressed;
+  final List<Cleint> cleint;
   const GridCleint({
     super.key,
-    required this.list,
+
     required this.onPressed,
+    required this.cleint,
   });
 
   @override
@@ -105,35 +112,59 @@ class _GridCleintState extends State<GridCleint> {
   int selectedIndex = -1;
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      padding: EdgeInsets.zero,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 12.0,
-          mainAxisSpacing: 22.0,
-          childAspectRatio: 0.9),
-      itemCount: widget.list.length,
-      itemBuilder: (BuildContext context, int index) {
-        return DeviceContainer(
-            onPressed: () {
-              setState(() {
-                selectedIndex = index;
-                widget.onPressed.call(index);
-              });
-            },
-            selected: selectedIndex == index);
-      },
-    );
+    return widget.cleint.isNotEmpty
+        ? GridView.builder(
+            padding: EdgeInsets.zero,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 12.0,
+                mainAxisSpacing: 22.0,
+                childAspectRatio: 0.9),
+            itemCount: widget.cleint.length,
+            itemBuilder: (BuildContext context, int index) {
+               if (index < widget.cleint.length) {
+              return DeviceContainer(
+                  cleint: widget.cleint[index],
+                  onPressed: () {
+                    setState(() {
+                      selectedIndex = index;
+                      widget.onPressed.call(index);
+                    });
+                  },
+                  selected: selectedIndex == index);
+               }else {
+                 return SizedBox();
+               }
+            }
+          )
+        : Center(
+            child: Column(
+              children: [
+                SizedBox(height: 20),
+                Assets.icons.boxempty
+                    .svg(color: Theme.of(context).colorScheme.shadow),
+                SizedBox(height: 20),
+                Text("You haven't added clients yet",
+                    style: Theme.of(context)
+                        .textTheme
+                        .headlineMedium!
+                        .copyWith(color: Theme.of(context).colorScheme.shadow)),
+              ],
+            ),
+          );
   }
 }
 
 class DeviceContainer extends StatelessWidget {
+  final Cleint? cleint;
   final Function() onPressed;
 
   final bool selected;
   const DeviceContainer(
-      {Key? key, required this.onPressed, required this.selected})
-      : super(key: key);
+      {super.key,
+      required this.onPressed,
+      required this.selected,
+      required this.cleint});
 
   @override
   Widget build(BuildContext context) {
@@ -157,13 +188,13 @@ class DeviceContainer extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text('0 active orders',
+            Text( '${countActiveOrders(cleint?.orders)} active orders',
                 style: Theme.of(context)
                     .textTheme
                     .labelMedium!
                     .copyWith(color: Theme.of(context).colorScheme.shadow)),
             Flexible(
-              child: Text('Cleint Name',
+              child: Text(cleint?.name ?? '',
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 3,
@@ -183,12 +214,30 @@ class DeviceContainer extends StatelessWidget {
       ),
     );
   }
+int countActiveOrders(List<Order?>? orders) {
+  if (orders == null || orders.isEmpty) {
+    return 0;
+  }
+
+  DateTime now = DateTime.now();
+  int activeOrders = 0;
+
+  for (Order? order in orders) {
+    if (order!.endTime.isAfter(now)) {
+      activeOrders++;
+    }
+  }
+
+  return activeOrders;
+}
+
 }
 
 class OrderContainer extends StatelessWidget {
   final Function() onPressed;
   final List<String> listImageFile;
   final String name;
+  final Cleint? cleint;
   final String nameDevice;
   final String date;
 
@@ -200,6 +249,7 @@ class OrderContainer extends StatelessWidget {
       required this.listImageFile,
       required this.name,
       required this.nameDevice,
+      required this.cleint,
       required this.date});
 
   @override
@@ -208,8 +258,10 @@ class OrderContainer extends StatelessWidget {
       onPressed: listImageFile.isNotEmpty
           ? null
           : () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => OrdersListView()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => OrdersListView(cleint: cleint)));
             },
       padding: EdgeInsets.only(bottom: 20),
       child: Container(

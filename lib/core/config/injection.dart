@@ -1,4 +1,8 @@
 import 'package:get_it/get_it.dart';
+import 'package:pp71/feature/controller/client_bloc/client_bloc.dart';
+import 'package:pp71/feature/controller/order_bloc/order_bloc.dart';
+import 'package:pp71/feature/services/cleint_datasoruce.dart';
+import 'package:pp71/feature/services/order_datasoruce.dart';
 
 
 
@@ -11,9 +15,12 @@ class ServiceLocator {
     //     .registerSingletonAsync<StorageService>(() => StorageService().init());
     // await GetIt.I.isReady<StorageService>();
 
-    // GetIt.I.registerLazySingleton<ItemDataSource>(() => ItemDataSource());
+    GetIt.I.registerLazySingleton<CleintDataSource>(() => CleintDataSource());
 
-    // GetIt.I.registerLazySingleton<ItemBloc>(() => ItemBloc());
+    GetIt.I.registerLazySingleton<CleintBloc>(() => CleintBloc());
+    GetIt.I.registerLazySingleton<OrderDataSource>(() => OrderDataSource());
+
+    GetIt.I.registerLazySingleton<OrderBloc>(() => OrderBloc());
 
   }
 }

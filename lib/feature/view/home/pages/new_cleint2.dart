@@ -1,16 +1,22 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
 import 'package:pp71/core/generated/assets.gen.dart';
+import 'package:pp71/core/models/cleint.dart';
 import 'package:pp71/core/utils/show_custom_snack_bar.dart';
 import 'package:pp71/core/widgets/app_button.dart';
 import 'package:pp71/core/widgets/feilds/names.dart';
 import 'package:pp71/core/widgets/feilds/numeric_fields.dart';
 import 'package:pp71/core/widgets/icon_button.dart';
+import 'package:pp71/feature/controller/client_bloc/client_bloc.dart';
+import 'package:pp71/feature/view/home/pages/home_view.dart';
+import 'package:pp71/feature/view/home/pages/new_order.dart';
+import 'package:pp71/feature/view/home/pages/new_order2.dart';
 
 // ignore: must_be_immutable
 class NewCleintSecondView extends StatefulWidget {
@@ -81,8 +87,22 @@ class _NewCleintSecondViewState extends State<NewCleintSecondView> {
           onPressed: () {
             if (_formKeys.currentState!.validate()) {
               if (widget.isBack) {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => Homeview()));
+                    BlocProvider.of<CleintBloc>(context).add(AddCleint(model: Cleint(
+                      name: widget.name,
+                      surname: widget.surName,
+                      notes: descriptionController.text,
+                      phone: phoneController.text,
+                      
+                      email: emailController.text,
+                      orders: [],
+                    )));
               } else {
-                
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => NewOrderView(isBack: false)));
               }
             } else {
               showCustomSnackBar(context, 'please fill in the field');
