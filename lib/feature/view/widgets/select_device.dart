@@ -64,7 +64,9 @@ class _SelectDeviceWidgetState extends State<SelectDeviceWidget> {
                       color: Theme.of(context).colorScheme.primaryContainer,
                       width: 0.2 * MediaQuery.of(context).size.width,
                       onPressed: () async {
+                        widget.onPressed.call(selectedIndex!);
                         Navigator.pop(context);
+                        
                       },
                       label: 'Add',
                     )
@@ -77,7 +79,7 @@ class _SelectDeviceWidgetState extends State<SelectDeviceWidget> {
                   list: widget.list,
                   onPressed: (index) {
                     setState(() {
-                      widget.onPressed.call(index);
+                      
                       selectedIndex = index;
                     });
                   })),
@@ -140,6 +142,8 @@ class DeviceContainer extends StatelessWidget {
       padding: EdgeInsets.zero,
       onPressed: onPressed,
       child: Container(
+        height: 200,
+        width: 163,
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
         decoration: BoxDecoration(
             color: selected

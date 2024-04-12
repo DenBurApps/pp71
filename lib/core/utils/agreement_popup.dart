@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:pp71/core/constants/settings_const.dart';
 import 'package:pp71/core/constants/text_const.dart';
+import 'package:pp71/core/generated/assets.gen.dart';
 import 'package:pp71/core/utils/email_helper.dart';
+import 'package:pp71/core/widgets/icon_button.dart';
 import 'package:theme_provider/theme_provider.dart';
 
 class AgreementPopUp extends StatelessWidget {
@@ -17,6 +19,12 @@ class AgreementPopUp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+          leading: CustomIconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Assets.icons.esc,
+          ),
           backgroundColor: Theme.of(context).colorScheme.background,
           title: Text(
             agreementType == AgreementType.privacy
@@ -28,18 +36,12 @@ class AgreementPopUp extends StatelessWidget {
                 color: Theme.of(context).colorScheme.onBackground),
           )),
       body: Material(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(30),
-          topRight: Radius.circular(30),
-        ),
         clipBehavior: Clip.hardEdge,
         child: Container(
-          height: MediaQuery.of(context).size.height * 0.8,
+          height: MediaQuery.of(context).size.height,
           padding: const EdgeInsets.only(
             left: 20,
             right: 20,
-            top: 20,
-            bottom: 30,
           ),
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.background,
@@ -47,7 +49,6 @@ class AgreementPopUp extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const SizedBox(height: 30),
               Expanded(
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),

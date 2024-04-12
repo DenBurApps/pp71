@@ -40,8 +40,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    colorIcons: Assets.icons.edit.svg()),
-                const SizedBox(width: 30),
+                    colorIcons: Assets.icons.esc.svg()),
+                const SizedBox(width: 50),
                 Text(
                   'Settings',
                   style: Theme.of(context).textTheme.displayLarge,
@@ -49,32 +49,16 @@ class _CustomDrawerState extends State<CustomDrawer> {
               ],
             ),
             const SizedBox(height: 40),
-            Container(
-              height: 40,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                  color: Theme.of(context)
-                      .colorScheme
-                      .onBackground
-                      .withOpacity(0.1),
-                  borderRadius: const BorderRadius.all(Radius.circular(30))),
-              child: Center(
-                child: Text(
-                  'Information',
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
             SettingsButtonWidget(
-                title: 'Privacy Policy',
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const AgreementPopUp(
-                              agreementType: AgreementType.privacy)));
-                }),
+              title: 'Version',
+              onPressed: () => DialogHelper.showAppVersionDialog(context),
+            ),
+            SettingsButtonWidget(
+              title: 'Rate Us',
+              onPressed: () {
+                showRateUsDialog(context, Theme.of(context));
+              },
+            ),
             SettingsButtonWidget(
                 title: 'Terms of use',
                 onPressed: () {
@@ -104,34 +88,15 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     });
                   });
                 }),
-            const SizedBox(height: 10),
-            Container(
-              height: 40,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                  color: Theme.of(context)
-                      .colorScheme
-                      .onBackground
-                      .withOpacity(0.1),
-                  borderRadius: const BorderRadius.all(Radius.circular(30))),
-              child: Center(
-                child: Text(
-                  'Contact us',
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
             SettingsButtonWidget(
-              title: 'Version',
-              onPressed: () => DialogHelper.showAppVersionDialog(context),
-            ),
-            SettingsButtonWidget(
-              title: 'Rate Us',
-              onPressed: () {
-                showRateUsDialog(context, Theme.of(context));
-              },
-            ),
+                title: 'Privacy Policy',
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const AgreementPopUp(
+                              agreementType: AgreementType.privacy)));
+                }),
           ],
         ),
       ),
@@ -150,18 +115,25 @@ class SettingsButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoButton(
-      minSize: 0,
-      padding: const EdgeInsets.only(bottom: 20),
-      onPressed: onPressed,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(title, style: Theme.of(context).textTheme.bodyMedium!),
-          Assets.icons.arrowR.svg(),
-        ],
-      ),
+    return Column(
+      children: [
+        CupertinoButton(
+          minSize: 0,
+          padding: const EdgeInsets.only(bottom: 20, top: 15),
+          onPressed: onPressed,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(title, style: Theme.of(context).textTheme.displayMedium!),
+              Assets.icons.arrowR.svg(),
+            ],
+          ),
+        ),
+        Divider(
+          color: Theme.of(context).colorScheme.shadow.withOpacity(0.5),
+        )
+      ],
     );
   }
 }

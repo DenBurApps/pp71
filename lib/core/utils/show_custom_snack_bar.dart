@@ -13,7 +13,7 @@ void showCustomSnackBar(BuildContext context, String txt) {
           content: Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.background,
+              color: Theme.of(context).colorScheme.shadow,
               borderRadius: BorderRadius.circular(10.0),
               boxShadow: [
                 BoxShadow(

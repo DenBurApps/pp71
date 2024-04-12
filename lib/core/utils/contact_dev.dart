@@ -7,14 +7,12 @@ Widget showContactDevoloper(
   BuildContext context,
   TextEditingController controller,
 ) {
-
   return SingleChildScrollView(
     child: Container(
       padding: const EdgeInsets.all(20.0),
       decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.background,
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(30), topRight: Radius.circular(30))),
+        color: Theme.of(context).colorScheme.background,
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -26,16 +24,14 @@ Widget showContactDevoloper(
             children: [
               Text(
                 'About Us',
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      fontSize: 14,
+                style: Theme.of(context).textTheme.displaySmall!.copyWith(
                       fontWeight: FontWeight.w700,
                     ),
               ),
               const SizedBox(height: 14.0),
               Text(
                 'Write anything you want to tell us about',
-                style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                      fontSize: 10,
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(
                       fontWeight: FontWeight.w400,
                     ),
               ),
@@ -50,12 +46,11 @@ Widget showContactDevoloper(
           AppButton(
             onPressed: () async {
               EmailHelper.launchEmailSubmission(
-                toEmail: 'Qasim8262922@gmail.com',
-                subject: 'Connect with support',
-                body: controller.text,
-                errorCallback: () {},
-                doneCallback: () {}
-              );
+                  toEmail: 'Qasim8262922@gmail.com',
+                  subject: 'Connect with support',
+                  body: controller.text,
+                  errorCallback: () {},
+                  doneCallback: () {});
               Navigator.pop(context);
             },
             label: 'Send',

@@ -14,6 +14,12 @@ import 'package:flutter/services.dart';
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
+  /// File path: assets/icons/Message.svg
+  SvgGenImage get message => const SvgGenImage('assets/icons/Message.svg');
+
+  /// File path: assets/icons/Phone.svg
+  SvgGenImage get phone => const SvgGenImage('assets/icons/Phone.svg');
+
   /// File path: assets/icons/Setting_line.svg
   SvgGenImage get settingLine =>
       const SvgGenImage('assets/icons/Setting_line.svg');
@@ -49,6 +55,8 @@ class $AssetsIconsGen {
 
   /// List of all assets
   List<SvgGenImage> get values => [
+        message,
+        phone,
         settingLine,
         statistics,
         arrowDown,

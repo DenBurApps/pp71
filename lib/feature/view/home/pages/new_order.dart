@@ -75,14 +75,18 @@ class _NewOrderViewState extends State<NewOrderView> {
         child: AppButton(
           onPressed: () {
             if (_formKeys.currentState!.validate()) {
-              // Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //         builder: (context) => NewCleintSecondView(
-              //               isBack: widget.isBack,
-              //               name: deviceController.text,
-              //               surName: surNameController.text,
-              //             )));
+              if (selectedIndex != null) {
+                // Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //         builder: (context) => NewCleintSecondView(
+                //               isBack: widget.isBack,
+                //               name: deviceController.text,
+                //               surName: surNameController.text,
+                //             )));
+              } else {
+                showCustomSnackBar(context, 'please select a client');
+              }
             } else {
               showCustomSnackBar(context, 'please fill in the field');
             }
@@ -130,50 +134,63 @@ class _NewOrderViewState extends State<NewOrderView> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Device:',
+                      Text('Client:',
                           style: Theme.of(context).textTheme.bodyLarge!),
                       selectedIndex != null
-                          ? DeviceContainer(
-                              onPressed: () {
-                                showModalBottomSheet(
-                                  context: context,
-                                  isScrollControlled: true,
-                                  barrierColor: Theme.of(context)
-                                      .colorScheme
-                                      .onBackground
-                                      .withOpacity(0.3),
-                                  builder: (BuildContext context) {
-                                    return SingleChildScrollView(
-                                        padding: EdgeInsets.only(
-                                          bottom: MediaQuery.of(context)
-                                              .viewInsets
-                                              .bottom,
-                                        ),
-                                        child: SelectDeviceWidget(
-                                            list: [
-                                              1,
-                                              2,
-                                              3,
-                                              4,
-                                              5,
-                                              6,
-                                              7,
-                                              8,
-                                              9,
-                                              10
-                                            ],
-                                            onPressed: (index) {
-                                              setState(() {
-                                                selectedIndex = index;
-                                                print(index);
-                                              });
-                                            }));
+                          ? Row(
+                              children: [
+                                CustomIconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      selectedIndex = null;
+                                    });
                                   },
-                                ).then((value) {
-                                  setState(() {});
-                                });
-                              },
-                              selected: selectedIndex != null,
+                                  icon: Assets.icons.trash,
+                                ),
+                                SizedBox(width: 50),
+                                DeviceContainer(
+                                  onPressed: () {
+                                    showModalBottomSheet(
+                                      context: context,
+                                      isScrollControlled: true,
+                                      barrierColor: Theme.of(context)
+                                          .colorScheme
+                                          .onBackground
+                                          .withOpacity(0.3),
+                                      builder: (BuildContext context) {
+                                        return SingleChildScrollView(
+                                            padding: EdgeInsets.only(
+                                              bottom: MediaQuery.of(context)
+                                                  .viewInsets
+                                                  .bottom,
+                                            ),
+                                            child: SelectDeviceWidget(
+                                                list: [
+                                                  1,
+                                                  2,
+                                                  3,
+                                                  4,
+                                                  5,
+                                                  6,
+                                                  7,
+                                                  8,
+                                                  9,
+                                                  10
+                                                ],
+                                                onPressed: (index) {
+                                                  setState(() {
+                                                    selectedIndex = index;
+                                                    print(index);
+                                                  });
+                                                }));
+                                      },
+                                    ).then((value) {
+                                      setState(() {});
+                                    });
+                                  },
+                                  selected: selectedIndex != null,
+                                ),
+                              ],
                             )
                           : Column(
                               children: [

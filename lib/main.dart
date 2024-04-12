@@ -12,8 +12,11 @@ import 'package:get_it/get_it.dart';
 import 'package:pp71/core/config/injection.dart';
 import 'package:pp71/core/routes/routes.dart';
 import 'package:pp71/core/theme/theme.dart';
+import 'package:pp71/feature/view/home/pages/customers_view.dart';
+import 'package:pp71/feature/view/home/pages/home_view.dart';
 import 'package:pp71/feature/view/home/pages/new_cleint.dart';
 import 'package:pp71/feature/view/home/pages/new_order.dart';
+import 'package:pp71/feature/view/home/pages/new_order2.dart';
 import 'package:theme_provider/theme_provider.dart';
 
 Future<void> main() async {
@@ -77,7 +80,7 @@ class MealPlaner extends StatelessWidget {
             builder: (context) => MaterialApp(
               title: 'MendMate',
               // routes: Routes.get(context),
-              home: NewOrderView(isBack: false),
+              home: CustomersListView(),
               
               debugShowCheckedModeBanner: false,
               theme: ThemeProvider.themeOf(context).data,

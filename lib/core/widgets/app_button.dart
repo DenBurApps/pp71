@@ -34,7 +34,7 @@ class AppButton extends StatelessWidget {
         height: height != null ? height! : 55,
         width: width != null ? width! : 145,
         decoration: BoxDecoration(
-          color: color ?? Theme.of(context).colorScheme.primary,
+          color: isActive ? color ?? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.secondary,
           borderRadius: BorderRadius.circular(30),
           border: isBorder != null
               ? isBorder!
@@ -47,11 +47,11 @@ class AppButton extends StatelessWidget {
           label,
           style: Theme.of(context).textTheme.displayLarge!.copyWith(
             fontSize: fontSize ?? Theme.of(context).textTheme.displayLarge!.fontSize,
-              color: isBorder != null
+              color: isActive ? isBorder != null
                   ? isBorder!
                       ? Theme.of(context).colorScheme.onBackground
                       : Theme.of(context).colorScheme.onBackground
-                  : Theme.of(context).colorScheme.background),
+                  : Theme.of(context).colorScheme.background : Theme.of(context).colorScheme.onBackground.withOpacity(0.6)),
         ),
       ),
     );

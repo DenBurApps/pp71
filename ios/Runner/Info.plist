@@ -20,6 +20,10 @@
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>NSCameraUsageDescription</key>
+	<string>To use the camera in an app to take photos of container items or task list items</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>To select photos from the gallery and attach them to container items or task list items</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
