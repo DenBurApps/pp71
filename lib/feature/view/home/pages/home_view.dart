@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pp71/core/generated/assets.gen.dart';
 import 'package:pp71/core/models/cleint.dart';
@@ -13,7 +12,6 @@ import 'package:pp71/feature/controller/order_bloc/order_bloc.dart';
 import 'package:pp71/feature/view/home/pages/customers_view.dart';
 import 'package:pp71/feature/view/home/pages/new_cleint.dart';
 import 'package:pp71/feature/view/home/pages/new_order.dart';
-import 'package:pp71/feature/view/home/pages/orders_view.dart';
 
 import '../../widgets/select_device.dart';
 
@@ -27,7 +25,7 @@ class Homeview extends StatefulWidget {
 class _HomeviewState extends State<Homeview> {
   bool isTab1 = true;
   bool isTab2 = false;
-  List<Client?> Clients = [];
+  List<Client?> clients = [];
   List<Order?> orders = [];
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
@@ -42,7 +40,7 @@ class _HomeviewState extends State<Homeview> {
     return BlocConsumer<ClientBloc, ClientState>(listener: (context, state) {
       if (state is ClientLoaded) {
        setState(() {
-          Clients = state.response;
+          clients = state.response;
        });
       } else if (state is ClientErrorState) {
         showCustomSnackBar(context, state.message);
@@ -51,7 +49,7 @@ class _HomeviewState extends State<Homeview> {
       return BlocConsumer<OrderBloc, OrderState>(listener: (context, state) {
         if (state is OrderLoaded) {
          setState(() {
-            orders = state.response ?? [];
+            orders = state.response;
          });
         } else if (state is ErrorState) {
           showCustomSnackBar(context, state.message);
@@ -77,7 +75,7 @@ class _HomeviewState extends State<Homeview> {
                             padding: const EdgeInsets.symmetric(
                                 vertical: 20, horizontal: 20),
                             child: isTab1
-                                ? Column(
+                                ? const Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                         TopStatck(),
@@ -96,7 +94,7 @@ class _HomeviewState extends State<Homeview> {
                                           name: 'Client Name',
                                         ),
                                       ])
-                                : Column(
+                                : const Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       TopStatck(),
@@ -118,21 +116,21 @@ class _HomeviewState extends State<Homeview> {
                 },
                 icon: Assets.icons.statistics,
               ),
-              SizedBox(width: 20)
+              const SizedBox(width: 20)
             ],
           ),
-          drawer: CustomDrawer(),
+          drawer: const CustomDrawer(),
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Container(
-                    padding: EdgeInsets.all(5),
+                    padding: const EdgeInsets.all(5),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.secondary,
-                      borderRadius: BorderRadius.all(Radius.circular(30)),
+                      borderRadius: const BorderRadius.all(Radius.circular(30)),
                     ),
                     height: 50,
                     width: MediaQuery.of(context).size.width,
@@ -155,7 +153,7 @@ class _HomeviewState extends State<Homeview> {
                                     ? Theme.of(context).colorScheme.primary
                                     : Colors.transparent,
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(30)),
+                                    const BorderRadius.all(Radius.circular(30)),
                               ),
                               child: Center(
                                   child: Text(
@@ -194,7 +192,7 @@ class _HomeviewState extends State<Homeview> {
                                         .primaryContainer
                                     : Colors.transparent,
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(30)),
+                                    const BorderRadius.all(Radius.circular(30)),
                               ),
                               child: Center(
                                   child: Text('Orders',
@@ -215,7 +213,7 @@ class _HomeviewState extends State<Homeview> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   CupertinoButton(
                     padding: EdgeInsets.zero,
                     onPressed: () {
@@ -224,13 +222,13 @@ class _HomeviewState extends State<Homeview> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    NewClientView(isBack: true)));
+                                    const NewClientView(isBack: true)));
                       } else {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    NewOrderView(isBack: true)));
+                                    const NewOrderView(isBack: true)));
                       }
                     },
                     child: Container(
@@ -238,7 +236,7 @@ class _HomeviewState extends State<Homeview> {
                           border: Border.all(
                               color: Theme.of(context).colorScheme.onBackground,
                               width: 2),
-                          borderRadius: BorderRadius.all(Radius.circular(30))),
+                          borderRadius: const BorderRadius.all(Radius.circular(30))),
                       height: 100,
                       width: MediaQuery.of(context).size.width,
                       child: Center(
@@ -246,31 +244,31 @@ class _HomeviewState extends State<Homeview> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   if (isTab1)
-                    Clients.isNotEmpty
+                    clients.isNotEmpty
                         ? GridView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
-                            physics: NeverScrollableScrollPhysics(),
+                            physics: const NeverScrollableScrollPhysics(),
                             gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
+                                const SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: 2,
                                     crossAxisSpacing: 12.0,
                                     mainAxisSpacing: 22.0,
                                     childAspectRatio: 0.9),
-                            itemCount: Clients.length,
+                            itemCount: clients.length,
                             itemBuilder: (BuildContext context, int index) {
                             
                               return DeviceContainer(
-                                  client: Clients[index],
+                                  client: clients[index],
                                   onPressed: () {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
                                                 CustomersListView(
-                                                  client: Clients[index]!,
+                                                  client: clients[index]!,
                                                 )));
                                                 
                                   },
@@ -280,11 +278,12 @@ class _HomeviewState extends State<Homeview> {
                         : Center(
                             child: Column(
                               children: [
-                                SizedBox(height: 20),
+                                const SizedBox(height: 20),
                                 Assets.icons.boxempty.svg(
+                                    // ignore: deprecated_member_use_from_same_package
                                     color:
                                         Theme.of(context).colorScheme.shadow),
-                                SizedBox(height: 20),
+                                const SizedBox(height: 20),
                                 Text("You haven't added clients yet",
                                     style: Theme.of(context)
                                         .textTheme
@@ -301,7 +300,7 @@ class _HomeviewState extends State<Homeview> {
                         ? ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
-                            physics: NeverScrollableScrollPhysics(),
+                            physics: const NeverScrollableScrollPhysics(),
                             itemCount: orders.length,
                             itemBuilder: (BuildContext context, int index) {
                               return OrderContainer(
@@ -322,11 +321,12 @@ class _HomeviewState extends State<Homeview> {
                         : Center(
                             child: Column(
                               children: [
-                                SizedBox(height: 20),
+                                const SizedBox(height: 20),
                                 Assets.icons.boxempty.svg(
+                                    // ignore: deprecated_member_use_from_same_package
                                     color:
                                         Theme.of(context).colorScheme.shadow),
-                                SizedBox(height: 20),
+                                const SizedBox(height: 20),
                                 Text("You haven't added orders yet",
                                     style: Theme.of(context)
                                         .textTheme
@@ -356,13 +356,13 @@ class TopStatck extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 15),
+      padding: const EdgeInsets.symmetric(horizontal: 15),
       decoration: BoxDecoration(
         border: Border.all(
           color: Theme.of(context).colorScheme.onBackground,
         ),
         color: Theme.of(context).colorScheme.onBackground,
-        borderRadius: BorderRadius.all(Radius.circular(30)),
+        borderRadius: const BorderRadius.all(Radius.circular(30)),
       ),
       height: 50,
       width: MediaQuery.of(context).size.width,
@@ -380,7 +380,7 @@ class TopStatck extends StatelessWidget {
                   .textTheme
                   .displayLarge!
                   .copyWith(color: Theme.of(context).colorScheme.background)),
-          SizedBox(width: 20),
+          const SizedBox(width: 20),
         ],
       ),
     );
@@ -405,10 +405,10 @@ class StatickContainerOrderSecond extends StatelessWidget {
       children: [
         Expanded(
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 15),
+            padding: const EdgeInsets.symmetric(horizontal: 15),
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.onBackground,
-              borderRadius: BorderRadius.all(Radius.circular(30)),
+              borderRadius: const BorderRadius.all(Radius.circular(30)),
             ),
             height: 225,
             width: 0.5 * MediaQuery.of(context).size.width,
@@ -421,11 +421,13 @@ class StatickContainerOrderSecond extends StatelessWidget {
                     Container(
                       decoration: BoxDecoration(
                         color: Theme.of(context).colorScheme.background,
-                        borderRadius: BorderRadius.only(
+                        borderRadius: const BorderRadius.only(
                           bottomRight: Radius.circular(30),
                           bottomLeft: Radius.circular(30),
                         ),
                       ),
+                      height: 50,
+                      width: 35,
                       child: Center(
                         child: Text(value1,
                             style: Theme.of(context)
@@ -436,18 +438,18 @@ class StatickContainerOrderSecond extends StatelessWidget {
                                         .colorScheme
                                         .onBackground)),
                       ),
-                      height: 50,
-                      width: 35,
                     ),
-                    SizedBox(width: 15),
+                    const SizedBox(width: 15),
                     Container(
                       decoration: BoxDecoration(
                         color: Theme.of(context).colorScheme.background,
-                        borderRadius: BorderRadius.only(
+                        borderRadius: const BorderRadius.only(
                           bottomRight: Radius.circular(30),
                           bottomLeft: Radius.circular(30),
                         ),
                       ),
+                      height: 50,
+                      width: 35,
                       child: Center(
                         child: Text(value2,
                             style: Theme.of(context)
@@ -458,14 +460,12 @@ class StatickContainerOrderSecond extends StatelessWidget {
                                         .colorScheme
                                         .onBackground)),
                       ),
-                      height: 50,
-                      width: 35,
                     )
                   ],
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Assets.icons.fair.svg(width: 50, height: 50),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text('Completed\norders',
                     textAlign: TextAlign.center,
                     style: Theme.of(context)
@@ -476,13 +476,13 @@ class StatickContainerOrderSecond extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(width: 15),
+        const SizedBox(width: 15),
         Expanded(
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 15),
+            padding: const EdgeInsets.symmetric(horizontal: 15),
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.primaryContainer,
-              borderRadius: BorderRadius.all(Radius.circular(30)),
+              borderRadius: const BorderRadius.all(Radius.circular(30)),
             ),
             height: 225,
             width: 0.5 * MediaQuery.of(context).size.width,
@@ -495,11 +495,13 @@ class StatickContainerOrderSecond extends StatelessWidget {
                     Container(
                       decoration: BoxDecoration(
                         color: Theme.of(context).colorScheme.background,
-                        borderRadius: BorderRadius.only(
+                        borderRadius: const BorderRadius.only(
                           bottomRight: Radius.circular(30),
                           bottomLeft: Radius.circular(30),
                         ),
                       ),
+                      height: 50,
+                      width: 35,
                       child: Center(
                         child: Text(value3,
                             style: Theme.of(context)
@@ -510,14 +512,12 @@ class StatickContainerOrderSecond extends StatelessWidget {
                                         .colorScheme
                                         .onBackground)),
                       ),
-                      height: 50,
-                      width: 35,
                     ),
                   ],
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Assets.icons.energy.svg(),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text('Active orders',
                     textAlign: TextAlign.center,
                     style: Theme.of(context)
@@ -555,10 +555,10 @@ class StatickContainerSecond extends StatelessWidget {
       children: [
         Expanded(
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 15),
+            padding: const EdgeInsets.symmetric(horizontal: 15),
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.onBackground,
-              borderRadius: BorderRadius.all(Radius.circular(30)),
+              borderRadius: const BorderRadius.all(Radius.circular(30)),
             ),
             height: 225,
             width: 0.5 * MediaQuery.of(context).size.width,
@@ -571,11 +571,13 @@ class StatickContainerSecond extends StatelessWidget {
                     Container(
                       decoration: BoxDecoration(
                         color: Theme.of(context).colorScheme.background,
-                        borderRadius: BorderRadius.only(
+                        borderRadius: const BorderRadius.only(
                           bottomRight: Radius.circular(30),
                           bottomLeft: Radius.circular(30),
                         ),
                       ),
+                      height: 50,
+                      width: 35,
                       child: Center(
                         child: Text(value1,
                             style: Theme.of(context)
@@ -586,18 +588,18 @@ class StatickContainerSecond extends StatelessWidget {
                                         .colorScheme
                                         .onBackground)),
                       ),
-                      height: 50,
-                      width: 35,
                     ),
-                    SizedBox(width: 15),
+                    const SizedBox(width: 15),
                     Container(
                       decoration: BoxDecoration(
                         color: Theme.of(context).colorScheme.background,
-                        borderRadius: BorderRadius.only(
+                        borderRadius: const BorderRadius.only(
                           bottomRight: Radius.circular(30),
                           bottomLeft: Radius.circular(30),
                         ),
                       ),
+                      height: 50,
+                      width: 35,
                       child: Center(
                         child: Text(value2,
                             style: Theme.of(context)
@@ -608,14 +610,12 @@ class StatickContainerSecond extends StatelessWidget {
                                         .colorScheme
                                         .onBackground)),
                       ),
-                      height: 50,
-                      width: 35,
                     )
                   ],
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Assets.icons.userAltLight.svg(width: 50, height: 50),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text('Customers\nwith active\norders',
                     textAlign: TextAlign.center,
                     style: Theme.of(context)
@@ -626,13 +626,13 @@ class StatickContainerSecond extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(width: 15),
+        const SizedBox(width: 15),
         Expanded(
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 15),
+            padding: const EdgeInsets.symmetric(horizontal: 15),
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.primary,
-              borderRadius: BorderRadius.all(Radius.circular(30)),
+              borderRadius: const BorderRadius.all(Radius.circular(30)),
             ),
             height: 225,
             width: 0.5 * MediaQuery.of(context).size.width,
@@ -645,11 +645,13 @@ class StatickContainerSecond extends StatelessWidget {
                     Container(
                       decoration: BoxDecoration(
                         color: Theme.of(context).colorScheme.background,
-                        borderRadius: BorderRadius.only(
+                        borderRadius: const BorderRadius.only(
                           bottomRight: Radius.circular(30),
                           bottomLeft: Radius.circular(30),
                         ),
                       ),
+                      height: 50,
+                      width: 35,
                       child: Center(
                         child: Text(value3,
                             style: Theme.of(context)
@@ -660,18 +662,18 @@ class StatickContainerSecond extends StatelessWidget {
                                         .colorScheme
                                         .onBackground)),
                       ),
-                      height: 50,
-                      width: 35,
                     ),
-                    SizedBox(width: 15),
+                    const SizedBox(width: 15),
                     Container(
                       decoration: BoxDecoration(
                         color: Theme.of(context).colorScheme.background,
-                        borderRadius: BorderRadius.only(
+                        borderRadius: const BorderRadius.only(
                           bottomRight: Radius.circular(30),
                           bottomLeft: Radius.circular(30),
                         ),
                       ),
+                      height: 50,
+                      width: 35,
                       child: Center(
                         child: Text(value4,
                             style: Theme.of(context)
@@ -682,12 +684,10 @@ class StatickContainerSecond extends StatelessWidget {
                                         .colorScheme
                                         .onBackground)),
                       ),
-                      height: 50,
-                      width: 35,
                     )
                   ],
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Flexible(
                   child: Text(name,
                       textAlign: TextAlign.center,
@@ -699,7 +699,7 @@ class StatickContainerSecond extends StatelessWidget {
                           .copyWith(
                               color: Theme.of(context).colorScheme.background)),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text('The largest\nnumber of\norders',
                     textAlign: TextAlign.center,
                     style: Theme.of(context)
@@ -730,13 +730,13 @@ class StatickContainers extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 15),
+      padding: const EdgeInsets.symmetric(horizontal: 15),
       decoration: BoxDecoration(
         border: Border.all(
           color: Theme.of(context).colorScheme.onBackground,
         ),
         color: Theme.of(context).colorScheme.background,
-        borderRadius: BorderRadius.all(Radius.circular(30)),
+        borderRadius: const BorderRadius.all(Radius.circular(30)),
       ),
       height: 120,
       width: MediaQuery.of(context).size.width,
@@ -751,41 +751,41 @@ class StatickContainers extends StatelessWidget {
                   color: isBlack
                       ? Theme.of(context).colorScheme.background
                       : Theme.of(context).colorScheme.onBackground,
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                     bottomRight: Radius.circular(30),
                     bottomLeft: Radius.circular(30),
                   ),
                 ),
+                height: 50,
+                width: 35,
                 child: Center(
                   child: Text(value1,
                       style: Theme.of(context).textTheme.displayLarge!.copyWith(
                           color: Theme.of(context).colorScheme.background)),
                 ),
-                height: 50,
-                width: 35,
               ),
-              SizedBox(width: 15),
+              const SizedBox(width: 15),
               Container(
                 decoration: BoxDecoration(
                   color: isBlack
                       ? Theme.of(context).colorScheme.background
                       : Theme.of(context).colorScheme.onBackground,
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                     bottomRight: Radius.circular(30),
                     bottomLeft: Radius.circular(30),
                   ),
                 ),
+                height: 50,
+                width: 35,
                 child: Center(
                   child: Text(value2,
                       style: Theme.of(context).textTheme.displayLarge!.copyWith(
                           color: Theme.of(context).colorScheme.background)),
                 ),
-                height: 50,
-                width: 35,
               )
             ],
           ),
-          SizedBox(height: 25),
+          const SizedBox(height: 25),
           Text('Total number of clients',
               style: Theme.of(context)
                   .textTheme

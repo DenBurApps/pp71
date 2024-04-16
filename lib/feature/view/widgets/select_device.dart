@@ -3,16 +3,12 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
 import 'package:pp71/core/generated/assets.gen.dart';
 import 'package:pp71/core/models/cleint.dart';
-import 'package:pp71/core/models/cleint.dart';
 import 'package:pp71/core/models/order.dart';
-import 'package:pp71/core/utils/email_helper.dart';
 import 'package:pp71/core/widgets/app_button.dart';
-import 'package:pp71/core/widgets/feilds/names.dart';
 import 'package:pp71/core/widgets/icon_button.dart';
 import 'package:pp71/feature/view/home/pages/orders_view.dart';
 
@@ -26,7 +22,7 @@ class SelectDeviceWidget extends StatefulWidget {
   });
 
   @override
-  _SelectDeviceWidgetState createState() => _SelectDeviceWidgetState();
+  State<SelectDeviceWidget> createState() => _SelectDeviceWidgetState();
 }
 
 class _SelectDeviceWidgetState extends State<SelectDeviceWidget> {
@@ -58,7 +54,7 @@ class _SelectDeviceWidgetState extends State<SelectDeviceWidget> {
                 },
                 icon: Assets.icons.esc,
               ),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
               Text(
                 'Select a client',
                 style: Theme.of(context).textTheme.displayMedium!,
@@ -75,10 +71,10 @@ class _SelectDeviceWidgetState extends State<SelectDeviceWidget> {
                       },
                       label: 'Add',
                     )
-                  : SizedBox(width: 70),
+                  : const SizedBox(width: 70),
             ],
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Expanded(
               child: GridClient(
                   client: widget.clients,
@@ -113,7 +109,7 @@ class _GridClientState extends State<GridClient> {
     return widget.client.isNotEmpty
         ? GridView.builder(
             padding: EdgeInsets.zero,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 12.0,
                 mainAxisSpacing: 22.0,
@@ -131,16 +127,17 @@ class _GridClientState extends State<GridClient> {
                     },
                     selected: selectedIndex == index);
               } else {
-                return SizedBox();
+                return const SizedBox();
               }
             })
         : Center(
             child: Column(
               children: [
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Assets.icons.boxempty
+                    // ignore: deprecated_member_use_from_same_package
                     .svg(color: Theme.of(context).colorScheme.shadow),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Text("You haven't added clients yet",
                     style: Theme.of(context)
                         .textTheme
@@ -171,12 +168,12 @@ class DeviceContainer extends StatelessWidget {
       child: Container(
         height: 200,
         width: 163,
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
         decoration: BoxDecoration(
             color: selected
                 ? Theme.of(context).colorScheme.primary
                 : Theme.of(context).colorScheme.secondary,
-            borderRadius: BorderRadius.all(
+            borderRadius: const BorderRadius.all(
               Radius.circular(30),
             ),
             border:
@@ -264,7 +261,7 @@ class OrderContainer extends StatelessWidget {
                             order: order,
                           )));
             },
-      padding: EdgeInsets.only(bottom: 20),
+      padding: const EdgeInsets.only(bottom: 20),
       child: Container(
           height: 220,
           width: MediaQuery.of(context).size.width,
@@ -344,12 +341,12 @@ class OrderContainer extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
+                  SizedBox(
                     width: 0.3 * MediaQuery.of(context).size.width,
                     child: Row(
                       children: [
                         Assets.icons.userAltLight.svg(),
-                        SizedBox(width: 5),
+                        const SizedBox(width: 5),
                         Expanded(
                           child: Text(order.client.name,
                               maxLines: 2,
@@ -365,12 +362,12 @@ class OrderContainer extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Container(
+                  SizedBox(
                     width: 0.3 * MediaQuery.of(context).size.width,
                     child: Row(
                       children: [
                         Assets.icons.tumer.svg(),
-                        SizedBox(width: 5),
+                        const SizedBox(width: 5),
                         Expanded(
                           child: Text(
                               DateFormat('dd MMMM, yyyy').format(order.endTime),

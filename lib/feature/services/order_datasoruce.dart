@@ -1,4 +1,7 @@
 import 'dart:io';
+// ignore: depend_on_referenced_packages
+import 'package:flutter/foundation.dart';
+// ignore: depend_on_referenced_packages
 import 'package:path/path.dart';
 
 import 'package:path_provider/path_provider.dart';
@@ -53,11 +56,14 @@ class OrderDataSource {
       Database db = await OrderDatabaseHelper().initDatabase();
 
       await db.delete('orders', where: 'id = ?', whereArgs: [id]);
-    } catch (e) {}
+    } catch (e) {
+       if (kDebugMode) {
+         print(e);
+       }
+    }
   }
 
   Future<void> updateOrder(Order order) async {
-    print(order.id);
     Database db = await OrderDatabaseHelper().initDatabase();
 
     await db.update('orders', order.toMap(),
@@ -70,7 +76,9 @@ class OrderDataSource {
       Database db = await OrderDatabaseHelper().initDatabase();
       await db.insert('orders', order.toMap());
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+         print(e);
+       }
     }
   }
 
@@ -81,7 +89,9 @@ class OrderDataSource {
      
       return rows.map((row) => Order.fromMap(row)).toList();
     } catch (e) {
-      print(e);
+     if (kDebugMode) {
+         print(e);
+       }
       return [];
     }
   }

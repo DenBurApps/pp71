@@ -1,24 +1,16 @@
-import 'dart:developer';
-import 'dart:ui';
 
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app_info/flutter_app_info.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pp71/core/config/injection.dart';
 import 'package:pp71/core/routes/routes.dart';
 import 'package:pp71/core/theme/theme.dart';
 import 'package:pp71/feature/controller/client_bloc/client_bloc.dart';
 import 'package:pp71/feature/controller/order_bloc/order_bloc.dart';
-import 'package:pp71/feature/view/home/pages/customers_view.dart';
 import 'package:pp71/feature/view/home/pages/home_view.dart';
-import 'package:pp71/feature/view/home/pages/new_order.dart';
-import 'package:pp71/feature/view/home/pages/new_order2.dart';
-import 'package:pp71/feature/view/home/pages/orders_view.dart';
+import 'package:pp71/feature/view/home/start/onb/onboarding_view.dart';
 import 'package:theme_provider/theme_provider.dart';
 
 Future<void> main() async {
@@ -82,8 +74,8 @@ class MealPlaner extends StatelessWidget {
           child: Builder(
             builder: (context) => MaterialApp(
               title: 'MendMate',
-              // routes: Routes.get(context),
-              home: const Homeview(),
+              routes: Routes.get(context),
+              // home: const OnboardingView(),
               
               debugShowCheckedModeBanner: false,
               theme: ThemeProvider.themeOf(context).data,

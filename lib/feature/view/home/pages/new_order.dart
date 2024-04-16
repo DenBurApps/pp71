@@ -1,11 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 
 import 'package:pp71/core/generated/assets.gen.dart';
 import 'package:pp71/core/models/cleint.dart';
@@ -99,12 +97,12 @@ class _NewOrderViewState extends State<NewOrderView> {
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: AppButton(
             onPressed: () {
               if (_formKeys.currentState!.validate()) {
                 if (selectedIndex != null) {
-                  if(widget.order != null)
+                  // if(widget.order != null) {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -114,6 +112,7 @@ class _NewOrderViewState extends State<NewOrderView> {
                                 isBack: true,
                                 device: deviceController.text,
                                 decs: descriptionController.text)));
+                  // }
                   
                 } else {
                   showCustomSnackBar(context, 'please select a client');
@@ -178,7 +177,7 @@ class _NewOrderViewState extends State<NewOrderView> {
                                     },
                                     icon: Assets.icons.trash,
                                   ),
-                                  SizedBox(width: 50),
+                                  const SizedBox(width: 50),
                                   DeviceContainer(
                                     client: clients.isNotEmpty
                                         ? clients[selectedIndex!]
@@ -255,7 +254,7 @@ class _NewOrderViewState extends State<NewOrderView> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  NewClientView(
+                                                  const NewClientView(
                                                     isBack: true,
                                                   )));
                                     },
@@ -327,7 +326,7 @@ class DeviceButton extends StatelessWidget {
                 : Border.all(
                     color: Theme.of(context).colorScheme.onBackground,
                   ),
-            borderRadius: BorderRadius.all(Radius.circular(30)),
+            borderRadius: const BorderRadius.all(Radius.circular(30)),
             color: chooseOrAdd
                 ? Theme.of(context).colorScheme.secondary
                 : Colors.transparent),

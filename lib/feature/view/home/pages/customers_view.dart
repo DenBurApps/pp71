@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:pp71/core/generated/assets.gen.dart';
@@ -11,7 +10,6 @@ import 'package:pp71/core/models/order.dart';
 import 'package:pp71/core/widgets/feilds/names.dart';
 import 'package:pp71/core/widgets/icon_button.dart';
 import 'package:pp71/feature/controller/client_bloc/client_bloc.dart';
-import 'package:pp71/feature/controller/order_bloc/order_bloc.dart';
 import 'package:pp71/feature/view/home/pages/home_view.dart';
 import 'package:pp71/feature/view/home/pages/new_cleint.dart';
 
@@ -25,7 +23,6 @@ class CustomersListView extends StatefulWidget {
 
 class _CustomersListViewState extends State<CustomersListView> {
   late TextEditingController descriptionController;
-  final List<String> _listImageFile = [];
   @override
   void initState() {
     descriptionController = TextEditingController();
@@ -78,7 +75,7 @@ class _CustomersListViewState extends State<CustomersListView> {
                               )));
               },
               icon: Assets.icons.edit),
-          SizedBox(width: 20)
+          const SizedBox(width: 20)
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -88,12 +85,12 @@ class _CustomersListViewState extends State<CustomersListView> {
               context: context,
               builder: (contex) => Center(
                     child: Container(
-                      padding: EdgeInsets.all(15),
+                      padding: const EdgeInsets.all(15),
                       width: MediaQuery.of(context).size.width * 0.9,
                       height: 220,
                       decoration: BoxDecoration(
                         color: Theme.of(context).colorScheme.background,
-                        borderRadius: BorderRadius.all(
+                        borderRadius: const BorderRadius.all(
                           Radius.circular(30),
                         ),
                       ),
@@ -129,7 +126,7 @@ class _CustomersListViewState extends State<CustomersListView> {
                                   width:
                                       0.4 * MediaQuery.of(context).size.width,
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(
+                                    borderRadius: const BorderRadius.all(
                                       Radius.circular(30),
                                     ),
                                     border: Border.all(
@@ -155,7 +152,7 @@ class _CustomersListViewState extends State<CustomersListView> {
                                   width:
                                       0.4 * MediaQuery.of(context).size.width,
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(
+                                    borderRadius: const BorderRadius.all(
                                       Radius.circular(30),
                                     ),
                                     color:
@@ -182,7 +179,7 @@ class _CustomersListViewState extends State<CustomersListView> {
                                   Navigator.pushAndRemoveUntil(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => Homeview()),
+                                          builder: (context) => const Homeview()),
                                       (Route route) => false);
                                 },
                               )
@@ -201,17 +198,17 @@ class _CustomersListViewState extends State<CustomersListView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               Text('Customers',
                   style: Theme.of(context).textTheme.displayLarge!),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               Container(
                 height: 50,
-                padding: EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.secondary,
-                  borderRadius: BorderRadius.all(Radius.circular(30)),
+                  borderRadius: const BorderRadius.all(Radius.circular(30)),
                 ),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -223,18 +220,18 @@ class _CustomersListViewState extends State<CustomersListView> {
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.displayMedium!),
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                   ],
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Container(
                 height: 50,
-                padding: EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.secondary,
-                  borderRadius: BorderRadius.all(Radius.circular(30)),
+                  borderRadius: const BorderRadius.all(Radius.circular(30)),
                 ),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -246,19 +243,19 @@ class _CustomersListViewState extends State<CustomersListView> {
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.displayMedium!),
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                   ],
                 ),
               ),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               Text('Notes', style: Theme.of(context).textTheme.displayLarge!),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               DescriptionFieldWidget(
                 readOnly: true,
                 controller: descriptionController,
                 titleHint: 'empty',
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -267,10 +264,10 @@ class _CustomersListViewState extends State<CustomersListView> {
                   Container(
                     height: 70,
                     width: 160,
-                    padding: EdgeInsets.all(5),
+                    padding: const EdgeInsets.all(5),
                     decoration: BoxDecoration(
                         color: Theme.of(context).colorScheme.onBackground,
-                        borderRadius: BorderRadius.all(Radius.circular(30))),
+                        borderRadius: const BorderRadius.all(Radius.circular(30))),
                     child: Center(
                       child: Text(
                         widget.client.orders.length.toString(),
@@ -287,7 +284,7 @@ class _CustomersListViewState extends State<CustomersListView> {
                   )
                 ],
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -296,10 +293,10 @@ class _CustomersListViewState extends State<CustomersListView> {
                   Container(
                     height: 70,
                     width: 160,
-                    padding: EdgeInsets.all(5),
+                    padding: const EdgeInsets.all(5),
                     decoration: BoxDecoration(
                         color: Theme.of(context).colorScheme.primaryContainer,
-                        borderRadius: BorderRadius.all(Radius.circular(30))),
+                        borderRadius: const BorderRadius.all(Radius.circular(30))),
                     child: Center(
                       child: Text(
                         '${countActiveOrders(widget.client.orders)}',
@@ -316,14 +313,14 @@ class _CustomersListViewState extends State<CustomersListView> {
                   )
                 ],
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Container(
                 height: 220,
                 width: MediaQuery.of(context).size.width,
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.primaryContainer,
-                  borderRadius: BorderRadius.all(
+                  borderRadius: const BorderRadius.all(
                     Radius.circular(30),
                   ),
                 ),
@@ -388,7 +385,7 @@ class _CustomersListViewState extends State<CustomersListView> {
                             : Center(
                                 child: Column(
                                   children: [
-                                    Icon(
+                                    const Icon(
                                       Icons.image_not_supported,
                                       size: 35,
                                     ),
@@ -407,7 +404,7 @@ class _CustomersListViewState extends State<CustomersListView> {
                         : Center(
                             child: Column(
                               children: [
-                                Icon(
+                                const Icon(
                                   Icons.image_not_supported,
                                   size: 35,
                                 ),
@@ -426,12 +423,12 @@ class _CustomersListViewState extends State<CustomersListView> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
+                        SizedBox(
                           width: 0.3 * MediaQuery.of(context).size.width,
                           child: Row(
                             children: [
                               Assets.icons.userAltLight.svg(),
-                              SizedBox(width: 5),
+                              const SizedBox(width: 5),
                               Expanded(
                                 child: Text(widget.client.name,
                                     maxLines: 2,
@@ -447,12 +444,12 @@ class _CustomersListViewState extends State<CustomersListView> {
                             ],
                           ),
                         ),
-                        Container(
+                        SizedBox(
                           width: 0.3 * MediaQuery.of(context).size.width,
                           child: Row(
                             children: [
                               Assets.icons.tumer.svg(),
-                              SizedBox(width: 5),
+                              const SizedBox(width: 5),
                               Expanded(
                                 child: Text(
                                     widget.client.orders.isNotEmpty
@@ -477,7 +474,7 @@ class _CustomersListViewState extends State<CustomersListView> {
                   ],
                 ),
               ),
-              SizedBox(height: 50),
+              const SizedBox(height: 50),
             ],
           ),
         ),

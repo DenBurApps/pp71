@@ -1,18 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:linear_progress_bar/linear_progress_bar.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 
 import 'package:pp71/core/generated/assets.gen.dart';
-import 'package:pp71/core/utils/show_custom_snack_bar.dart';
 import 'package:pp71/core/widgets/app_button.dart';
-import 'package:pp71/core/widgets/feilds/names.dart';
 import 'package:pp71/core/widgets/icon_button.dart';
-import 'package:pp71/feature/view/widgets/select_device.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class SelectDateWidget extends StatefulWidget {
@@ -80,7 +72,7 @@ class _SelectDateWidgetState extends State<SelectDateWidget> {
                     },
                     icon: Assets.icons.esc,
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Text(
                     'Select a date',
                     style: Theme.of(context).textTheme.displayMedium!,
@@ -93,19 +85,19 @@ class _SelectDateWidgetState extends State<SelectDateWidget> {
                           width: 0.2 * MediaQuery.of(context).size.width,
                           onPressed: () async {
                             widget.onDaySelected
-                                .call(widget.focusedDay!, widget.focusedDay);
+                                .call(widget.focusedDay, widget.focusedDay);
                             Navigator.pop(context);
                           },
                           label: 'Add',
                         )
-                      : SizedBox(width: 70),
+                      : const SizedBox(width: 70),
                 ],
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Expanded(
                 child: Column(
                   children: [
-                    SizedBox(height: 25),
+                    const SizedBox(height: 25),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -113,7 +105,7 @@ class _SelectDateWidgetState extends State<SelectDateWidget> {
                         _buildPopupMenuButtonYears(),
                       ],
                     ),
-                    SizedBox(height: 15),
+                    const SizedBox(height: 15),
                     Container(
                       padding: const EdgeInsets.all(5),
                       decoration: BoxDecoration(
@@ -230,7 +222,7 @@ class _SelectDateWidgetState extends State<SelectDateWidget> {
       iconColor: Theme.of(context).colorScheme.background,
       shadowColor: Theme.of(context).colorScheme.background,
       padding: EdgeInsets.zero,
-      offset: Offset(-550, 0),
+      offset: const Offset(-550, 0),
       elevation: 0,
       onSelected: (String value) {
         setState(() {
@@ -245,7 +237,7 @@ class _SelectDateWidgetState extends State<SelectDateWidget> {
       child: Row(
         children: [
           Assets.icons.arrowDown.svg(),
-          SizedBox(width: 5),
+          const SizedBox(width: 5),
           Text(_selectedMonth, style: Theme.of(context).textTheme.bodyLarge),
         ],
       ),
@@ -293,8 +285,8 @@ class _SelectDateWidgetState extends State<SelectDateWidget> {
             height: 57,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.vertical(
-                  top: isFirst ? Radius.circular(30) : Radius.zero,
-                  bottom: isLast ? Radius.circular(30) : Radius.zero,
+                  top: isFirst ? const Radius.circular(30) : Radius.zero,
+                  bottom: isLast ? const Radius.circular(30) : Radius.zero,
                 ),
                 border: Border(
                     bottom: BorderSide(
@@ -302,7 +294,7 @@ class _SelectDateWidgetState extends State<SelectDateWidget> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(width: 20),
+                const SizedBox(width: 20),
                 Text(month,
                     style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                         color: _selectedMonth == month
@@ -350,7 +342,7 @@ class _SelectDateWidgetState extends State<SelectDateWidget> {
       child: Row(
         children: [
           Assets.icons.arrowDown.svg(),
-          SizedBox(width: 5),
+          const SizedBox(width: 5),
           Text(_selectedYear.toString(),
               style: Theme.of(context).textTheme.bodyLarge),
         ],
@@ -386,16 +378,16 @@ class _SelectDateWidgetState extends State<SelectDateWidget> {
           contentPadding: EdgeInsets.zero,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
-              top: isFirst ? Radius.circular(30) : Radius.zero,
-              bottom: isLast ? Radius.circular(30) : Radius.zero,
+              top: isFirst ? const Radius.circular(30) : Radius.zero,
+              bottom: isLast ? const Radius.circular(30) : Radius.zero,
             ),
           ),
           title: Container(
             height: 57,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.vertical(
-                top: isFirst ? Radius.circular(30) : Radius.zero,
-                bottom: isLast ? Radius.circular(30) : Radius.zero,
+                top: isFirst ? const Radius.circular(30) : Radius.zero,
+                bottom: isLast ? const Radius.circular(30) : Radius.zero,
               ),
               border: Border(
                 bottom: BorderSide(

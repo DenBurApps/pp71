@@ -28,7 +28,7 @@ class _NamesFieldWidgetState extends State<NamesFieldWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.secondary,
         borderRadius: BorderRadius.all(
@@ -88,12 +88,12 @@ class _NamesFieldWidgetState extends State<NamesFieldWidget> {
 
 class DescriptionFieldWidget extends StatefulWidget {
   const DescriptionFieldWidget({
-    Key? key,
+    super.key,
     required this.controller,
     required this.titleHint,
     this.onChanged,
     this.readOnly = false, // Добавленный параметр для запрета ввода текста
-  }) : super(key: key);
+  });
 
   final TextEditingController controller;
   final String titleHint;
@@ -111,7 +111,7 @@ class _DescriptionFieldWidgetState extends State<DescriptionFieldWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.secondary,
         borderRadius: const BorderRadius.all(Radius.circular(30)),
@@ -199,7 +199,7 @@ class _EmailFieldWidgetState extends State<EmailFieldWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.secondary,
         borderRadius: BorderRadius.circular(30),

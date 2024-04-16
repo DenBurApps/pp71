@@ -1,22 +1,21 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 
 import 'package:pp71/core/generated/assets.gen.dart';
 import 'package:pp71/core/models/cleint.dart';
+import 'package:pp71/core/models/order.dart';
 import 'package:pp71/core/utils/show_custom_snack_bar.dart';
 import 'package:pp71/core/widgets/app_button.dart';
 import 'package:pp71/core/widgets/feilds/names.dart';
 import 'package:pp71/core/widgets/feilds/numeric_fields.dart';
 import 'package:pp71/core/widgets/icon_button.dart';
 import 'package:pp71/feature/controller/client_bloc/client_bloc.dart';
+import 'package:pp71/feature/controller/order_bloc/order_bloc.dart';
 import 'package:pp71/feature/view/home/pages/home_view.dart';
 import 'package:pp71/feature/view/home/pages/new_order.dart';
-import 'package:pp71/feature/view/home/pages/new_order2.dart';
 
 // ignore: must_be_immutable
 class NewClientSecondView extends StatefulWidget {
@@ -88,16 +87,39 @@ class _NewClientSecondViewState extends State<NewClientSecondView> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: AppButton(
           onPressed: () {
             if (_formKeys.currentState!.validate()) {
               if (widget.isBack) {
                 Navigator.pushAndRemoveUntil(
                     context,
-                    MaterialPageRoute(builder: (context) => Homeview()),
+                    MaterialPageRoute(builder: (context) => const Homeview()),
                     (Route route) => false);
                 if (widget.client != null) {
+                  if (widget.client!.orders.isNotEmpty) {
+                    print(widget.client!.orders.last!.id);
+                    print(widget.client!.orders.last!.startTime);
+                    print(widget.client!.orders.last!.device);
+                    
+                    BlocProvider.of<OrderBloc>(context).add(UpdateOrder(
+                        model: Order(
+                      id: widget.client!.orders.last!.id,
+                      device: widget.client!.orders.last!.device,
+                      description: widget.client!.orders.last!.description,
+                      client: Client(
+                        name: widget.name,
+                        surname: widget.surName,
+                        notes: descriptionController.text,
+                        phone: phoneController.text,
+                        email: emailController.text,
+                        orders: widget.client!.orders,
+                      ),
+                      photos: widget.client!.orders.last!.photos,
+                      startTime: widget.client!.orders.last!.startTime,
+                      endTime: widget.client!.orders.last!.endTime,
+                    )));
+                  } 
                   BlocProvider.of<ClientBloc>(context).add(UpdateClient(
                       model: Client(
                     id: widget.client!.id,
@@ -106,8 +128,10 @@ class _NewClientSecondViewState extends State<NewClientSecondView> {
                     notes: descriptionController.text,
                     phone: phoneController.text,
                     email: emailController.text,
-                    orders: [],
+                    orders: widget.client!.orders,
                   )));
+                  
+
                 } else {
                   BlocProvider.of<ClientBloc>(context).add(AddClient(
                       model: Client(
@@ -123,7 +147,8 @@ class _NewClientSecondViewState extends State<NewClientSecondView> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => NewOrderView(isBack: false)));
+                        builder: (context) =>
+                            const NewOrderView(isBack: false)));
               }
             } else {
               showCustomSnackBar(context, 'please fill in the field');
@@ -205,6 +230,7 @@ class _NewClientSecondViewState extends State<NewClientSecondView> {
                             } else {
                               return 'please fill in the "email" field';
                             }
+                            return null;
                           },
                         ),
                       ],

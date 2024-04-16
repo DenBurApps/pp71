@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:pp71/core/generated/assets.gen.dart';
@@ -14,7 +13,6 @@ import 'package:pp71/core/widgets/icon_button.dart';
 import 'package:pp71/feature/controller/client_bloc/client_bloc.dart';
 import 'package:pp71/feature/controller/order_bloc/order_bloc.dart';
 import 'package:pp71/feature/view/home/pages/home_view.dart';
-import 'package:pp71/feature/view/home/pages/new_cleint.dart';
 import 'package:pp71/feature/view/home/pages/new_order.dart';
 import 'package:pp71/feature/view/widgets/select_device.dart';
 
@@ -29,8 +27,7 @@ class OrdersListView extends StatefulWidget {
 
 class _OrdersListViewState extends State<OrdersListView> {
   late TextEditingController descriptionController;
-  final List<String> _listImageFile = [];
-  List<Client> Clients = [];
+  List<Client> clients = [];
 
   @override
   void initState() {
@@ -45,7 +42,7 @@ class _OrdersListViewState extends State<OrdersListView> {
   Widget build(BuildContext context) {
     return BlocConsumer<ClientBloc, ClientState>(listener: (context, state) {
       if (state is ClientLoaded) {
-        Clients = state.response;
+        clients = state.response;
       } else if (state is ClientErrorState) {
         showCustomSnackBar(context, state.message);
       }
@@ -72,7 +69,7 @@ class _OrdersListViewState extends State<OrdersListView> {
                               )));
                 },
                 icon: Assets.icons.edit),
-            SizedBox(width: 20)
+            const SizedBox(width: 20)
           ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -82,12 +79,12 @@ class _OrdersListViewState extends State<OrdersListView> {
                 context: context,
                 builder: (contex) => Center(
                       child: Container(
-                        padding: EdgeInsets.all(15),
+                        padding: const EdgeInsets.all(15),
                         width: MediaQuery.of(context).size.width * 0.9,
                         height: 220,
                         decoration: BoxDecoration(
                           color: Theme.of(context).colorScheme.background,
-                          borderRadius: BorderRadius.all(
+                          borderRadius: const BorderRadius.all(
                             Radius.circular(30),
                           ),
                         ),
@@ -123,7 +120,7 @@ class _OrdersListViewState extends State<OrdersListView> {
                                     width:
                                         0.4 * MediaQuery.of(context).size.width,
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(
+                                      borderRadius: const BorderRadius.all(
                                         Radius.circular(30),
                                       ),
                                       border: Border.all(
@@ -149,7 +146,7 @@ class _OrdersListViewState extends State<OrdersListView> {
                                     width:
                                         0.4 * MediaQuery.of(context).size.width,
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(
+                                      borderRadius: const BorderRadius.all(
                                         Radius.circular(30),
                                       ),
                                       color:
@@ -211,7 +208,7 @@ class _OrdersListViewState extends State<OrdersListView> {
                                     Navigator.pushAndRemoveUntil(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => Homeview()),
+                                          builder: (context) => const Homeview()),
                                       (Route route) => false,
                                     );
                                   },
@@ -231,7 +228,7 @@ class _OrdersListViewState extends State<OrdersListView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -242,7 +239,7 @@ class _OrdersListViewState extends State<OrdersListView> {
                     ),
                     Flexible(
                       child: Padding(
-                        padding: EdgeInsets.only(left: 15),
+                        padding: const EdgeInsets.only(left: 15),
                         child: Text(widget.order.device,
                             maxLines: 3,
                             overflow: TextOverflow.ellipsis,
@@ -251,14 +248,14 @@ class _OrdersListViewState extends State<OrdersListView> {
                     ),
                   ],
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Container(
                   height: 130,
                   width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.secondary,
-                    borderRadius: BorderRadius.all(
+                    borderRadius: const BorderRadius.all(
                       Radius.circular(30),
                     ),
                   ),
@@ -323,26 +320,26 @@ class _OrdersListViewState extends State<OrdersListView> {
                           ),
                         ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Text('Description of the problem',
                     style: Theme.of(context).textTheme.displayLarge!),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 DescriptionFieldWidget(
                   readOnly: true,
                   controller: descriptionController,
                   titleHint: 'empty',
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Text('Start date',
                     style: Theme.of(context).textTheme.displayLarge!),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Container(
                   height: 50,
-                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.secondary,
-                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                    borderRadius: const BorderRadius.all(Radius.circular(30)),
                   ),
                   child: Center(
                     child: Text(
@@ -354,17 +351,17 @@ class _OrdersListViewState extends State<OrdersListView> {
                         style: Theme.of(context).textTheme.displayMedium!),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Text('End date',
                     style: Theme.of(context).textTheme.displayLarge!),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Container(
                   height: 50,
-                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.primaryContainer,
-                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                    borderRadius: const BorderRadius.all(Radius.circular(30)),
                   ),
                   child: Center(
                     child: Text(
@@ -376,7 +373,7 @@ class _OrdersListViewState extends State<OrdersListView> {
                         style: Theme.of(context).textTheme.displayMedium!),
                   ),
                 ),
-                SizedBox(height: 50),
+                const SizedBox(height: 50),
               ],
             ),
           ),

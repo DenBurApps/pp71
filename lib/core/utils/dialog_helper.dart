@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_info/flutter_app_info.dart';
-import 'package:pp71/core/routes/routes.dart';
 
 class DialogHelper {
   static Future<void> showNoInternetDialog(BuildContext context) async =>

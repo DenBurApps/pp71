@@ -1,6 +1,8 @@
 import 'dart:io';
 
 // ignore: depend_on_referenced_packages
+import 'package:flutter/foundation.dart';
+// ignore: depend_on_referenced_packages
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pp71/core/models/cleint.dart';
@@ -54,7 +56,11 @@ class ClientDataSource {
       Database db = await ClientDatabaseHelper().initDatabase();
 
       await db.delete('clients', where: 'id = ?', whereArgs: [id]);
-    } catch (e) {}
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
   }
 
   Future<void> updateClient(Client client) async {
@@ -72,7 +78,9 @@ class ClientDataSource {
       await db.insert('clients', client.toMap());
       // ignore: empty_catches
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 

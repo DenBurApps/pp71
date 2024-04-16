@@ -26,7 +26,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       if (loadLessons.isNotEmpty) {
         emit(OrderLoaded(response: loadLessons));
       } else {
-        emit(const ErrorState(message: 'Orders are empty'));
+        // emit(const ErrorState());
       }
     });
     on<AddOrder>((event, emit) async {
@@ -36,11 +36,11 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       if (loadLessons.isNotEmpty) {
         emit(OrderLoaded(response: loadLessons));
       } else {
-        emit(const ErrorState(message: 'Orders are empty'));
+        // emit(const ErrorState(message: 'Orders are empty'));
       }
     });
     on<UpdateOrder>((event, emit) async {
-    print(event.model.device);
+   
       emit(LoadingState());
       if (event.model.id != null) {
         await _dataSource.updateOrder(event.model);
@@ -51,7 +51,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         emit(const ErrorState(message: 'Orders are empty'));
       }
       } else {
-        emit(const ErrorState(message: 'try again later'));
+        // emit(const ErrorState(message: 'try again later'));
       }
     });
   }
