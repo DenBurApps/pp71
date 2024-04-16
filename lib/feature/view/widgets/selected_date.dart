@@ -12,8 +12,6 @@ import 'package:pp71/core/utils/show_custom_snack_bar.dart';
 import 'package:pp71/core/widgets/app_button.dart';
 import 'package:pp71/core/widgets/feilds/names.dart';
 import 'package:pp71/core/widgets/icon_button.dart';
-import 'package:pp71/feature/view/home/pages/new_cleint.dart';
-import 'package:pp71/feature/view/home/pages/new_cleint2.dart';
 import 'package:pp71/feature/view/widgets/select_device.dart';
 import 'package:table_calendar/table_calendar.dart';
 

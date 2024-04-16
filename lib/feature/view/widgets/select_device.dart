@@ -1,9 +1,13 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 
 import 'package:pp71/core/generated/assets.gen.dart';
+import 'package:pp71/core/models/cleint.dart';
 import 'package:pp71/core/models/cleint.dart';
 import 'package:pp71/core/models/order.dart';
 import 'package:pp71/core/utils/email_helper.dart';
@@ -13,14 +17,12 @@ import 'package:pp71/core/widgets/icon_button.dart';
 import 'package:pp71/feature/view/home/pages/orders_view.dart';
 
 class SelectDeviceWidget extends StatefulWidget {
-
   final Function(int) onPressed;
-  final List<Cleint> cleints;
+  final List<Client> clients;
   const SelectDeviceWidget({
     super.key,
-
     required this.onPressed,
-    required this.cleints,
+    required this.clients,
   });
 
   @override
@@ -78,12 +80,10 @@ class _SelectDeviceWidgetState extends State<SelectDeviceWidget> {
           ),
           SizedBox(height: 20),
           Expanded(
-              child: GridCleint(
-                  cleint: widget.cleints,
-                  
+              child: GridClient(
+                  client: widget.clients,
                   onPressed: (index) {
                     setState(() {
-                      
                       selectedIndex = index;
                     });
                   })),
@@ -93,26 +93,24 @@ class _SelectDeviceWidgetState extends State<SelectDeviceWidget> {
   }
 }
 
-class GridCleint extends StatefulWidget {
-
+class GridClient extends StatefulWidget {
   final Function(int) onPressed;
-  final List<Cleint> cleint;
-  const GridCleint({
+  final List<Client> client;
+  const GridClient({
     super.key,
-
     required this.onPressed,
-    required this.cleint,
+    required this.client,
   });
 
   @override
-  State<GridCleint> createState() => _GridCleintState();
+  State<GridClient> createState() => _GridClientState();
 }
 
-class _GridCleintState extends State<GridCleint> {
+class _GridClientState extends State<GridClient> {
   int selectedIndex = -1;
   @override
   Widget build(BuildContext context) {
-    return widget.cleint.isNotEmpty
+    return widget.client.isNotEmpty
         ? GridView.builder(
             padding: EdgeInsets.zero,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -120,23 +118,22 @@ class _GridCleintState extends State<GridCleint> {
                 crossAxisSpacing: 12.0,
                 mainAxisSpacing: 22.0,
                 childAspectRatio: 0.9),
-            itemCount: widget.cleint.length,
+            itemCount: widget.client.length,
             itemBuilder: (BuildContext context, int index) {
-               if (index < widget.cleint.length) {
-              return DeviceContainer(
-                  cleint: widget.cleint[index],
-                  onPressed: () {
-                    setState(() {
-                      selectedIndex = index;
-                      widget.onPressed.call(index);
-                    });
-                  },
-                  selected: selectedIndex == index);
-               }else {
-                 return SizedBox();
-               }
-            }
-          )
+              if (index < widget.client.length) {
+                return DeviceContainer(
+                    client: widget.client[index],
+                    onPressed: () {
+                      setState(() {
+                        selectedIndex = index;
+                        widget.onPressed.call(index);
+                      });
+                    },
+                    selected: selectedIndex == index);
+              } else {
+                return SizedBox();
+              }
+            })
         : Center(
             child: Column(
               children: [
@@ -156,7 +153,7 @@ class _GridCleintState extends State<GridCleint> {
 }
 
 class DeviceContainer extends StatelessWidget {
-  final Cleint? cleint;
+  final Client? client;
   final Function() onPressed;
 
   final bool selected;
@@ -164,7 +161,7 @@ class DeviceContainer extends StatelessWidget {
       {super.key,
       required this.onPressed,
       required this.selected,
-      required this.cleint});
+      required this.client});
 
   @override
   Widget build(BuildContext context) {
@@ -188,13 +185,13 @@ class DeviceContainer extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text( '${countActiveOrders(cleint?.orders)} active orders',
+            Text('${countActiveOrders(client?.orders)} active orders',
                 style: Theme.of(context)
                     .textTheme
                     .labelMedium!
                     .copyWith(color: Theme.of(context).colorScheme.shadow)),
             Flexible(
-              child: Text(cleint?.name ?? '',
+              child: Text(client?.name ?? '',
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 3,
@@ -204,7 +201,7 @@ class DeviceContainer extends StatelessWidget {
                             : Theme.of(context).colorScheme.onBackground,
                       )),
             ),
-            Text('3 orders',
+            Text('${countOrders(client?.orders)} orders',
                 style: Theme.of(context)
                     .textTheme
                     .labelMedium!
@@ -214,54 +211,58 @@ class DeviceContainer extends StatelessWidget {
       ),
     );
   }
-int countActiveOrders(List<Order?>? orders) {
-  if (orders == null || orders.isEmpty) {
-    return 0;
-  }
 
-  DateTime now = DateTime.now();
-  int activeOrders = 0;
+  int countOrders(List<Order?>? orders) {
 
-  for (Order? order in orders) {
-    if (order!.endTime.isAfter(now)) {
-      activeOrders++;
+    if (orders == null || orders.isEmpty) {
+      return 0;
     }
+    return orders.length;
   }
 
-  return activeOrders;
-}
+  int countActiveOrders(List<Order?>? orders) {
+    if (orders == null || orders.isEmpty) {
+      return 0;
+    }
 
+    DateTime now = DateTime.now();
+    int activeOrders = 0;
+
+    for (Order? order in orders) {
+      if (order!.endTime.isAfter(now)) {
+        activeOrders++;
+      }
+    }
+
+    return activeOrders;
+  }
 }
 
 class OrderContainer extends StatelessWidget {
   final Function() onPressed;
-  final List<String> listImageFile;
-  final String name;
-  final Cleint? cleint;
-  final String nameDevice;
-  final String date;
+  final Client client;
+
+  final Order order;
 
   final bool selected;
   const OrderContainer(
       {super.key,
       required this.onPressed,
       required this.selected,
-      required this.listImageFile,
-      required this.name,
-      required this.nameDevice,
-      required this.cleint,
-      required this.date});
+      required this.client,
+      required this.order});
 
   @override
   Widget build(BuildContext context) {
     return CupertinoButton(
-      onPressed: listImageFile.isNotEmpty
-          ? null
-          : () {
+      onPressed:  () {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => OrdersListView(cleint: cleint)));
+                      builder: (context) => OrdersListView(
+                            client: client,
+                            order: order,
+                          )));
             },
       padding: EdgeInsets.only(bottom: 20),
       child: Container(
@@ -274,19 +275,19 @@ class OrderContainer extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(nameDevice,
+              Text(order.device,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.displayMedium!.copyWith(
                       color: Theme.of(context).colorScheme.background)),
-              listImageFile.isNotEmpty
+              order.photos.isNotEmpty
                   ? Expanded(
                       child: ListView.builder(
                         shrinkWrap: true,
                         padding: EdgeInsets.zero,
                         scrollDirection: Axis.horizontal,
                         physics: const BouncingScrollPhysics(),
-                        itemCount: listImageFile.length,
+                        itemCount: order.photos.length,
                         itemBuilder: (context, index) => Stack(
                           children: [
                             Container(
@@ -301,18 +302,18 @@ class OrderContainer extends StatelessWidget {
                                     .onBackground
                                     .withOpacity(0.1),
                               ),
-                              // child: Center(
-                              //   child: ClipRRect(
-                              //       borderRadius:
-                              //           const BorderRadius.all(
-                              //               Radius.circular(15)),
-                              //       child: Image.file(
-                              //         File(_listImageFile[index]),
-                              //         fit: BoxFit.fill,
-                              //         height: 100,
-                              //         width: 100,
-                              //       )),
-                              // ),
+                              child: Center(
+                                child: ClipRRect(
+                                    borderRadius:
+                                        const BorderRadius.all(
+                                            Radius.circular(15)),
+                                    child: Image.file(
+                                      File(order.photos[index]),
+                                      fit: BoxFit.fill,
+                                      height: 100,
+                                      width: 100,
+                                    )),
+                              ),
                             ),
                           ],
                         ),
@@ -350,7 +351,7 @@ class OrderContainer extends StatelessWidget {
                         Assets.icons.userAltLight.svg(),
                         SizedBox(width: 5),
                         Expanded(
-                          child: Text(name,
+                          child: Text(order.client.name,
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: Theme.of(context)
@@ -371,7 +372,8 @@ class OrderContainer extends StatelessWidget {
                         Assets.icons.tumer.svg(),
                         SizedBox(width: 5),
                         Expanded(
-                          child: Text(date,
+                          child: Text(
+                              DateFormat('dd MMMM, yyyy').format(order.endTime),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: Theme.of(context)

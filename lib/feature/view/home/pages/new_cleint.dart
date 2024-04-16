@@ -6,6 +6,7 @@ import 'package:linear_progress_bar/linear_progress_bar.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
 import 'package:pp71/core/generated/assets.gen.dart';
+import 'package:pp71/core/models/cleint.dart';
 import 'package:pp71/core/utils/show_custom_snack_bar.dart';
 import 'package:pp71/core/widgets/app_button.dart';
 import 'package:pp71/core/widgets/feilds/names.dart';
@@ -13,15 +14,16 @@ import 'package:pp71/core/widgets/icon_button.dart';
 import 'package:pp71/feature/view/home/pages/new_cleint2.dart';
 
 // ignore: must_be_immutable
-class NewCleintView extends StatefulWidget {
+class NewClientView extends StatefulWidget {
   final bool isBack;
-  const NewCleintView({super.key, required this.isBack});
+  final Client? cleint;
+  const NewClientView({super.key, required this.isBack, this.cleint});
 
   @override
-  State<NewCleintView> createState() => _NewCleintViewState();
+  State<NewClientView> createState() => _NewClientViewState();
 }
 
-class _NewCleintViewState extends State<NewCleintView> {
+class _NewClientViewState extends State<NewClientView> {
   late TextEditingController nameController;
   late TextEditingController surNameController;
   late TextEditingController descriptionController;
@@ -35,7 +37,11 @@ class _NewCleintViewState extends State<NewCleintView> {
     nameController = TextEditingController();
     surNameController = TextEditingController();
     descriptionController = TextEditingController();
-
+    if (widget.cleint != null) {
+      nameController.text = widget.cleint!.name;
+      surNameController.text = widget.cleint!.surname;
+      descriptionController.text = widget.cleint!.notes;
+    }
     nameController.addListener(_updateControllerState);
     surNameController.addListener(_updateControllerState);
 
@@ -74,16 +80,28 @@ class _NewCleintViewState extends State<NewCleintView> {
         child: AppButton(
           onPressed: () {
             if (_formKeys.currentState!.validate()) {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => NewCleintSecondView(
-                            isBack: widget.isBack,
-                            name: nameController.text,
-                            surName: surNameController.text,
-                          )));
+              if (widget.cleint != null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => NewClientSecondView(
+                            client: widget.cleint,
+                              isBack: widget.isBack,
+                              name: nameController.text,
+                              surName: surNameController.text,
+                            )));
+              } else {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => NewClientSecondView(
+                              isBack: widget.isBack,
+                              name: nameController.text,
+                              surName: surNameController.text,
+                            )));
+              }
             } else {
-               showCustomSnackBar(context, 'please fill in the field');
+              showCustomSnackBar(context, 'please fill in the field');
             }
           },
           label: 'Next',
@@ -130,7 +148,7 @@ class _NewCleintViewState extends State<NewCleintView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: 20),
-                        Text('Name Cleint',
+                        Text('Name Client',
                             style: Theme.of(context).textTheme.bodyLarge!),
                         const SizedBox(height: 10),
                         NamesFieldWidget(

@@ -27,11 +27,11 @@ class OrderDatabaseHelper {
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           device TEXT,
           description TEXT,
-          startTime TEXT,
-          endTime TEXT,
+          startTime INTEGER,
+          endTime INTEGER,
           photos TEXT,
           client TEXT,
-          FOREIGN KEY (client) REFERENCES cleints(id)
+          FOREIGN KEY (client) REFERENCES Clients(id)
         )
         ''');
       },
@@ -57,6 +57,7 @@ class OrderDataSource {
   }
 
   Future<void> updateOrder(Order order) async {
+    print(order.id);
     Database db = await OrderDatabaseHelper().initDatabase();
 
     await db.update('orders', order.toMap(),
@@ -64,13 +65,7 @@ class OrderDataSource {
   }
 
   Future<void> insertOrder(Order order) async {
-    print(order.client);
-    print(order.description);
-    print(order.device);
-    print(order.startTime);
-    print(order.endTime);
-    print(order.photos);
-
+   
     try {
       Database db = await OrderDatabaseHelper().initDatabase();
       await db.insert('orders', order.toMap());
@@ -83,9 +78,10 @@ class OrderDataSource {
     try {
       Database db = await OrderDatabaseHelper().initDatabase();
       List<Map<String, dynamic>> rows = await db.query('orders');
-      print(rows);
+     
       return rows.map((row) => Order.fromMap(row)).toList();
     } catch (e) {
+      print(e);
       return [];
     }
   }

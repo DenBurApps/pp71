@@ -16,7 +16,6 @@ import 'package:pp71/feature/controller/client_bloc/client_bloc.dart';
 import 'package:pp71/feature/controller/order_bloc/order_bloc.dart';
 import 'package:pp71/feature/view/home/pages/customers_view.dart';
 import 'package:pp71/feature/view/home/pages/home_view.dart';
-import 'package:pp71/feature/view/home/pages/new_cleint.dart';
 import 'package:pp71/feature/view/home/pages/new_order.dart';
 import 'package:pp71/feature/view/home/pages/new_order2.dart';
 import 'package:pp71/feature/view/home/pages/orders_view.dart';
@@ -62,7 +61,7 @@ class MealPlaner extends StatelessWidget {
     return 
     MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => GetIt.instance<CleintBloc>()),
+        BlocProvider(create: (context) => GetIt.instance<ClientBloc>()),
         BlocProvider(create: (context) => GetIt.instance<OrderBloc>()),
       ],
       child: 

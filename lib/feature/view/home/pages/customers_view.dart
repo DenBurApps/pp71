@@ -1,12 +1,23 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:pp71/core/generated/assets.gen.dart';
+import 'package:pp71/core/models/cleint.dart';
+import 'package:pp71/core/models/order.dart';
 import 'package:pp71/core/widgets/feilds/names.dart';
 import 'package:pp71/core/widgets/icon_button.dart';
+import 'package:pp71/feature/controller/client_bloc/client_bloc.dart';
+import 'package:pp71/feature/controller/order_bloc/order_bloc.dart';
+import 'package:pp71/feature/view/home/pages/home_view.dart';
+import 'package:pp71/feature/view/home/pages/new_cleint.dart';
 
 class CustomersListView extends StatefulWidget {
-  const CustomersListView({super.key});
+  final Client client;
+  const CustomersListView({super.key, required this.client});
 
   @override
   State<CustomersListView> createState() => _CustomersListViewState();
@@ -18,7 +29,25 @@ class _CustomersListViewState extends State<CustomersListView> {
   @override
   void initState() {
     descriptionController = TextEditingController();
+    descriptionController.text = widget.client.notes;
     super.initState();
+  }
+
+  int countActiveOrders(List<Order?>? orders) {
+    if (orders == null || orders.isEmpty) {
+      return 0;
+    }
+
+    DateTime now = DateTime.now();
+    int activeOrders = 0;
+
+    for (Order? order in orders) {
+      if (order!.endTime.isAfter(now)) {
+        activeOrders++;
+      }
+    }
+
+    return activeOrders;
   }
 
   @override
@@ -33,13 +62,20 @@ class _CustomersListViewState extends State<CustomersListView> {
             },
             icon: Assets.icons.esc),
         title: Text(
-          'Name Surname',
+          widget.client.name,
           style: Theme.of(context).textTheme.displayMedium!,
         ),
         actions: [
           CustomIconButton(
               onPressed: () {
-                // Navigator.pop(context);
+                Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NewClientView(
+                            
+                              isBack: true,
+                               cleint: widget.client,
+                              )));
               },
               icon: Assets.icons.edit),
           SizedBox(width: 20)
@@ -66,7 +102,7 @@ class _CustomersListViewState extends State<CustomersListView> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text('Do you really want to\ndelete this client?',
-                          textAlign: TextAlign.center,
+                              textAlign: TextAlign.center,
                               style: Theme.of(context)
                                   .textTheme
                                   .displayMedium!
@@ -75,7 +111,7 @@ class _CustomersListViewState extends State<CustomersListView> {
                                           .colorScheme
                                           .onBackground)),
                           Text('All information about her will be lost.',
-                          textAlign: TextAlign.center,
+                              textAlign: TextAlign.center,
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyLarge!
@@ -83,7 +119,6 @@ class _CustomersListViewState extends State<CustomersListView> {
                                       color: Theme.of(context)
                                           .colorScheme
                                           .shadow)),
-                                         
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -130,11 +165,25 @@ class _CustomersListViewState extends State<CustomersListView> {
                                     child: Text('Yes',
                                         style: Theme.of(context)
                                             .textTheme
-                                            .bodyLarge!.copyWith(color: Theme.of(context).colorScheme.background)),
+                                            .bodyLarge!
+                                            .copyWith(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .background)),
                                   ),
                                 ),
                                 onPressed: () {
+                                  BlocProvider.of<ClientBloc>(context)
+                                      .add(DeleteClient(model: widget.client));
+
+                                  BlocProvider.of<ClientBloc>(context)
+                                      .add(GetAllClient());
                                   Navigator.pop(context);
+                                  Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Homeview()),
+                                      (Route route) => false);
                                 },
                               )
                             ],
@@ -169,7 +218,7 @@ class _CustomersListViewState extends State<CustomersListView> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Assets.icons.phone.svg(),
-                    Text('4546789088',
+                    Text(widget.client.phone,
                         maxLines: 1,
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
@@ -192,7 +241,7 @@ class _CustomersListViewState extends State<CustomersListView> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Assets.icons.message.svg(),
-                    Text('pochta@mail.ru',
+                    Text(widget.client.email,
                         maxLines: 1,
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
@@ -224,7 +273,7 @@ class _CustomersListViewState extends State<CustomersListView> {
                         borderRadius: BorderRadius.all(Radius.circular(30))),
                     child: Center(
                       child: Text(
-                        '10',
+                        widget.client.orders.length.toString(),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context)
@@ -253,7 +302,7 @@ class _CustomersListViewState extends State<CustomersListView> {
                         borderRadius: BorderRadius.all(Radius.circular(30))),
                     child: Center(
                       child: Text(
-                        '1',
+                        '${countActiveOrders(widget.client.orders)}',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context)
@@ -290,49 +339,71 @@ class _CustomersListViewState extends State<CustomersListView> {
                             .copyWith(
                                 color:
                                     Theme.of(context).colorScheme.background)),
-                    _listImageFile.isNotEmpty
-                        ? Row(
-                            children: [
-                              Expanded(
+                    widget.client.orders.isNotEmpty
+                        ? widget.client.orders.last!.photos.isNotEmpty
+                            ? SizedBox(
+                                width: MediaQuery.of(context).size.width,
+                                height: 100,
                                 child: ListView.builder(
                                   shrinkWrap: true,
                                   padding: EdgeInsets.zero,
                                   scrollDirection: Axis.horizontal,
                                   physics: const BouncingScrollPhysics(),
-                                  itemCount: _listImageFile.length,
+                                  itemCount:
+                                      widget.client.orders.last!.photos.length,
                                   itemBuilder: (context, index) => Container(
-                                    height: 100,
+                                    height:
+                                        100, // Устанавливаем фиксированную высоту
                                     width: 100,
                                     margin: const EdgeInsets.only(left: 10),
                                     decoration: BoxDecoration(
                                       borderRadius: const BorderRadius.all(
                                           Radius.circular(15)),
                                       border: Border.all(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .background),
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .background,
+                                      ),
                                       color: Theme.of(context)
                                           .colorScheme
                                           .onBackground
                                           .withOpacity(0.1),
                                     ),
-                                    // child: Center(
-                                    //   child: ClipRRect(
-                                    //       borderRadius:
-                                    //           const BorderRadius.all(
-                                    //               Radius.circular(15)),
-                                    //       child: Image.file(
-                                    //         File(_listImageFile[index]),
-                                    //         fit: BoxFit.fill,
-                                    //         height: 100,
-                                    //         width: 100,
-                                    //       )),
-                                    // ),
+                                    child: Center(
+                                      child: ClipRRect(
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(15)),
+                                        child: Image.file(
+                                          File(widget.client.orders.last!
+                                              .photos[index]),
+                                          fit: BoxFit.fill,
+                                          height: 100,
+                                          width: 100,
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          )
+                              )
+                            : Center(
+                                child: Column(
+                                  children: [
+                                    Icon(
+                                      Icons.image_not_supported,
+                                      size: 35,
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Text('No Image',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge!
+                                            .copyWith(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .background)),
+                                  ],
+                                ),
+                              )
                         : Center(
                             child: Column(
                               children: [
@@ -352,53 +423,57 @@ class _CustomersListViewState extends State<CustomersListView> {
                               ],
                             ),
                           ),
-                     Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    width: 0.3 * MediaQuery.of(context).size.width,
-                    child: Row(
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Assets.icons.userAltLight.svg(),
-                        SizedBox(width: 5),
-                        Expanded(
-                          child: Text('Name Surname',
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .labelMedium!
-                                  .copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .background)),
+                        Container(
+                          width: 0.3 * MediaQuery.of(context).size.width,
+                          child: Row(
+                            children: [
+                              Assets.icons.userAltLight.svg(),
+                              SizedBox(width: 5),
+                              Expanded(
+                                child: Text(widget.client.name,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelMedium!
+                                        .copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .background)),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          width: 0.3 * MediaQuery.of(context).size.width,
+                          child: Row(
+                            children: [
+                              Assets.icons.tumer.svg(),
+                              SizedBox(width: 5),
+                              Expanded(
+                                child: Text(
+                                    widget.client.orders.isNotEmpty
+                                        ? DateFormat('dd MMMM, yyyy').format(
+                                            widget.client.orders.last!.endTime)
+                                        : 'no date',
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelMedium!
+                                        .copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .background)),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
-                    ),
-                  ),
-                  Container(
-                    width: 0.3 * MediaQuery.of(context).size.width,
-                    child: Row(
-                      children: [
-                        Assets.icons.tumer.svg(),
-                        SizedBox(width: 5),
-                        Expanded(
-                          child: Text('17 March, 2024',
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .labelMedium!
-                                  .copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .background)),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              )
+                    )
                   ],
                 ),
               ),

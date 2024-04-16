@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:pp71/core/models/order.dart';
 
-class Cleint {
+class Client {
   int? id;
   final String name;
   final String surname;
@@ -11,7 +11,7 @@ class Cleint {
   final String email;
   final List<Order?> orders;
 
-  Cleint({
+  Client({
     this.id,
     required this.name,
     required this.surname,
@@ -29,12 +29,13 @@ class Cleint {
       'notes': notes,
       'phone': phone,
       'email': email,
-      'orders': jsonEncode(orders.map((order) => order?.toMap()).toList()),
+      'orders':
+          jsonEncode(orders.map((order) => order?.toMap() ?? {}).toList()),
     };
   }
 
-  factory Cleint.fromMap(Map<String, dynamic> map) {
-    return Cleint(
+  factory Client.fromMap(Map<String, dynamic> map) {
+    return Client(
       id: map['id'],
       name: map['name'] as String,
       surname: map['surname'] as String,

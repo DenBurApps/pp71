@@ -7,18 +7,18 @@ sealed class ClientEvent  {
 
 class GetAllClient extends ClientEvent {}
 
-class DeleteCleint extends ClientEvent {
-  final Cleint model;
+class DeleteClient extends ClientEvent {
+  final Client model;
 
-  const DeleteCleint({required this.model});
+  const DeleteClient({required this.model});
 }
-class UpdateCleint extends ClientEvent {
-  final Cleint model;
+class UpdateClient extends ClientEvent {
+  final Client model;
 
-  const UpdateCleint({required this.model});
+  const UpdateClient({required this.model});
 }
-class AddCleint extends ClientEvent {
-  final Cleint model;
+class AddClient extends ClientEvent {
+  final Client model;
 
-  const AddCleint({required this.model});
+  const AddClient({required this.model});
 }

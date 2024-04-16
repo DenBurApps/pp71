@@ -19,10 +19,10 @@ import 'package:pp71/core/utils/show_custom_snack_bar.dart';
 import 'package:pp71/core/widgets/app_button.dart';
 import 'package:pp71/core/widgets/feilds/names.dart';
 import 'package:pp71/core/widgets/icon_button.dart';
+import 'package:pp71/feature/controller/client_bloc/client_bloc.dart';
 import 'package:pp71/feature/controller/order_bloc/order_bloc.dart';
 import 'package:pp71/feature/view/home/pages/home_view.dart';
-import 'package:pp71/feature/view/home/pages/new_cleint.dart';
-import 'package:pp71/feature/view/home/pages/new_cleint2.dart';
+
 import 'package:pp71/feature/view/widgets/select_device.dart';
 import 'package:pp71/feature/view/widgets/selected_date.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -32,15 +32,18 @@ class NewOrderSecondView extends StatefulWidget {
   final bool isBack;
   final String device;
   final String? decs;
-  final Cleint cleint;
+  final Client client;
+  final Order? order;
 
-  const NewOrderSecondView(
-      {super.key,
-      required this.isBack,
-      required this.device,
-       required this.cleint,
-      this.decs,
-    });
+  const NewOrderSecondView({
+    super.key,
+    required this.isBack,
+    required this.device,
+    
+    required this.client,
+    this.decs,
+    this.order,
+  });
 
   @override
   State<NewOrderSecondView> createState() => _NewOrderSecondViewState();
@@ -52,7 +55,7 @@ class _NewOrderSecondViewState extends State<NewOrderSecondView> {
   late DateTime _firstDay;
   late DateTime _lastDay;
   File? _imageFile;
-  final List<String> _listImageFile = [];
+   List<String> _listImageFile = [];
 
   int? year;
   int? mounth;
@@ -64,7 +67,14 @@ class _NewOrderSecondViewState extends State<NewOrderSecondView> {
     _focusedDay2 = DateTime.now();
     _firstDay = DateTime.now().subtract(const Duration(days: 1000));
     _lastDay = DateTime.now().add(const Duration(days: 1000));
-
+if(widget.order != null ){
+  _focusedDay1 = widget.order!.startTime;
+  _selectedDay1 = widget.order!.startTime;
+  _focusedDay2 = widget.order!.endTime;
+  _selectedDay2 = widget.order!.endTime;
+  _listImageFile = widget.order!.photos;
+  
+}
     super.initState();
   }
 
@@ -93,28 +103,120 @@ class _NewOrderSecondViewState extends State<NewOrderSecondView> {
           isActive: _selectedDay1 != null || _selectedDay2 != null,
           onPressed: () {
             if (_selectedDay1 != null && _selectedDay2 != null) {
-              
-                if (_selectedDay1!.isBefore(_selectedDay2!)) {
-                  BlocProvider.of<OrderBloc>(context).add(AddOrder(
-                      model: Order(
-                          client: widget.cleint,
-                          device: widget.device,
-                          description: widget.decs,
-                          startTime: _selectedDay1!,
-                          endTime:  _selectedDay2!,
-                          photos: [])));
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Homeview()));
-                } else {
-                  showCustomSnackBar(context,
-                      'The start date you choose must be before the end date. Please correct the selected dates.');
-                }
-             
+              if (_selectedDay1!.isBefore(_selectedDay2!)) {
+                if(widget.order != null ) {
+                   Order newOrder = Order(
+                  client: Client(
+                      id: widget.client.id,
+                      name: widget.client.name,
+                      surname: widget.client.surname,
+                      notes: widget.client.surname,
+                      phone: widget.client.phone,
+                      email: widget.client.email,
+                      orders: widget.client.orders),
+                  device: widget.device,
+                  description: widget.decs,
+                  startTime: _selectedDay1!,
+                  endTime: _selectedDay2!,
+                  photos: _listImageFile,
+                );
+                List<Order?> listOrders = [];
+                listOrders.addAll(widget.client.orders);
+                listOrders.add(newOrder);
+
+                BlocProvider.of<ClientBloc>(context).add(
+                  UpdateClient(
+                      model: Client(
+                          id: widget.client.id,
+                          name: widget.client.name,
+                          surname: widget.client.surname,
+                          notes: widget.client.surname,
+                          phone: widget.client.phone,
+                          email: widget.client.email,
+                          orders: listOrders)),
+                );
+                BlocProvider.of<OrderBloc>(context)
+                    .add(UpdateOrder(model: Order(
+                      id: widget.order!.id,
+                  client: Client(
+                      id: widget.client.id,
+                      name: widget.client.name,
+                      surname: widget.client.surname,
+                      notes: widget.client.surname,
+                      phone: widget.client.phone,
+                      email: widget.client.email,
+                      orders: listOrders),
+                  device: widget.device,
+                  description: widget.decs,
+                  startTime: _selectedDay1!,
+                  endTime: _selectedDay2!,
+                  photos: _listImageFile,
+                )));
+                // Navigator.pushAndRemoveUntil(
+                //     context,
+                //     MaterialPageRoute(builder: (context) => Homeview()),
+                //     (Route route) => false);
+                
+                } else{
+                Order newOrder = Order(
+                  client: Client(
+                      id: widget.client.id,
+                      name: widget.client.name,
+                      surname: widget.client.surname,
+                      notes: widget.client.surname,
+                      phone: widget.client.phone,
+                      email: widget.client.email,
+                      orders: widget.client.orders),
+                  device: widget.device,
+                  description: widget.decs,
+                  startTime: _selectedDay1!,
+                  endTime: _selectedDay2!,
+                  photos: _listImageFile,
+                );
+                List<Order?> listOrders = [];
+                listOrders.addAll(widget.client.orders);
+                listOrders.add(newOrder);
+
+                BlocProvider.of<ClientBloc>(context).add(
+                  UpdateClient(
+                      model: Client(
+                          id: widget.client.id,
+                          name: widget.client.name,
+                          surname: widget.client.surname,
+                          notes: widget.client.surname,
+                          phone: widget.client.phone,
+                          email: widget.client.email,
+                          orders: listOrders)),
+                );
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => Homeview()),
+                    (Route route) => false);
+                BlocProvider.of<OrderBloc>(context)
+                    .add(AddOrder(model: Order(
+                  client: Client(
+                      id: widget.client.id,
+                      name: widget.client.name,
+                      surname: widget.client.surname,
+                      notes: widget.client.surname,
+                      phone: widget.client.phone,
+                      email: widget.client.email,
+                      orders: listOrders),
+                  device: widget.device,
+                  description: widget.decs,
+                  startTime: _selectedDay1!,
+                  endTime: _selectedDay2!,
+                  photos: _listImageFile,
+                )));}
+              } else {
+                showCustomSnackBar(context,
+                    'The start date you choose must be before the end date. Please correct the selected dates.');
+              }
             } else {
               showCustomSnackBar(context, 'Please select a date');
             }
           },
-          label: 'Next',
+          label: 'Save',
           width: MediaQuery.of(context).size.width,
           height: 50,
         ),

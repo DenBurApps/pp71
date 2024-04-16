@@ -15,9 +15,9 @@ class ServiceLocator {
     //     .registerSingletonAsync<StorageService>(() => StorageService().init());
     // await GetIt.I.isReady<StorageService>();
 
-    GetIt.I.registerLazySingleton<CleintDataSource>(() => CleintDataSource());
+    GetIt.I.registerLazySingleton<ClientDataSource>(() => ClientDataSource());
 
-    GetIt.I.registerLazySingleton<CleintBloc>(() => CleintBloc());
+    GetIt.I.registerLazySingleton<ClientBloc>(() => ClientBloc());
     GetIt.I.registerLazySingleton<OrderDataSource>(() => OrderDataSource());
 
     GetIt.I.registerLazySingleton<OrderBloc>(() => OrderBloc());

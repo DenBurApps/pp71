@@ -1,19 +1,19 @@
 part of 'client_bloc.dart';
 
-sealed class CleintState {
-  const CleintState();
+sealed class ClientState {
+  const ClientState();
 }
 
-final class InitialState extends CleintState {}
+final class InitialState extends ClientState {}
 
-final class CleintLoaded extends CleintState {
-  final List<Cleint> response;
-  const CleintLoaded({required this.response});
+final class ClientLoaded extends ClientState {
+  final List<Client> response;
+  const ClientLoaded({required this.response});
 }
 
-final class LoadingState extends CleintState {}
+final class LoadingState extends ClientState {}
 
-final class CleintErrorState extends CleintState {
+final class ClientErrorState extends ClientState {
   final String message;
-  const CleintErrorState({required this.message});
+  const ClientErrorState({required this.message});
 }

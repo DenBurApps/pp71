@@ -19,22 +19,24 @@ import 'package:pp71/feature/view/home/pages/new_order.dart';
 import 'package:pp71/feature/view/home/pages/new_order2.dart';
 
 // ignore: must_be_immutable
-class NewCleintSecondView extends StatefulWidget {
+class NewClientSecondView extends StatefulWidget {
   final String name;
   final String surName;
+  final Client? client;
 
   final bool isBack;
-  const NewCleintSecondView(
+  const NewClientSecondView(
       {super.key,
       required this.isBack,
       required this.name,
-      required this.surName});
+      required this.surName,
+      this.client});
 
   @override
-  State<NewCleintSecondView> createState() => _NewCleintSecondViewState();
+  State<NewClientSecondView> createState() => _NewClientSecondViewState();
 }
 
-class _NewCleintSecondViewState extends State<NewCleintSecondView> {
+class _NewClientSecondViewState extends State<NewClientSecondView> {
   late TextEditingController phoneController;
   late TextEditingController emailController;
   late TextEditingController descriptionController;
@@ -51,7 +53,11 @@ class _NewCleintSecondViewState extends State<NewCleintSecondView> {
 
     phoneController.addListener(_updateControllerState);
     emailController.addListener(_updateControllerState);
-
+    if (widget.client != null) {
+      phoneController.text = widget.client!.phone;
+      emailController.text = widget.client!.email;
+      descriptionController.text = widget.client!.notes;
+    }
     super.initState();
   }
 
@@ -87,17 +93,32 @@ class _NewCleintSecondViewState extends State<NewCleintSecondView> {
           onPressed: () {
             if (_formKeys.currentState!.validate()) {
               if (widget.isBack) {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Homeview()));
-                    BlocProvider.of<CleintBloc>(context).add(AddCleint(model: Cleint(
-                      name: widget.name,
-                      surname: widget.surName,
-                      notes: descriptionController.text,
-                      phone: phoneController.text,
-                      
-                      email: emailController.text,
-                      orders: [],
-                    )));
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => Homeview()),
+                    (Route route) => false);
+                if (widget.client != null) {
+                  BlocProvider.of<ClientBloc>(context).add(UpdateClient(
+                      model: Client(
+                    id: widget.client!.id,
+                    name: widget.name,
+                    surname: widget.surName,
+                    notes: descriptionController.text,
+                    phone: phoneController.text,
+                    email: emailController.text,
+                    orders: [],
+                  )));
+                } else {
+                  BlocProvider.of<ClientBloc>(context).add(AddClient(
+                      model: Client(
+                    name: widget.name,
+                    surname: widget.surName,
+                    notes: descriptionController.text,
+                    phone: phoneController.text,
+                    email: emailController.text,
+                    orders: [],
+                  )));
+                }
               } else {
                 Navigator.push(
                     context,

@@ -9,20 +9,22 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 
 import 'package:pp71/core/generated/assets.gen.dart';
 import 'package:pp71/core/models/cleint.dart';
+import 'package:pp71/core/models/order.dart';
 import 'package:pp71/core/utils/show_custom_snack_bar.dart';
 import 'package:pp71/core/widgets/app_button.dart';
 import 'package:pp71/core/widgets/feilds/names.dart';
 import 'package:pp71/core/widgets/icon_button.dart';
 import 'package:pp71/feature/controller/client_bloc/client_bloc.dart';
+
 import 'package:pp71/feature/view/home/pages/new_cleint.dart';
-import 'package:pp71/feature/view/home/pages/new_cleint2.dart';
 import 'package:pp71/feature/view/home/pages/new_order2.dart';
 import 'package:pp71/feature/view/widgets/select_device.dart';
 
 // ignore: must_be_immutable
 class NewOrderView extends StatefulWidget {
   final bool isBack;
-  const NewOrderView({super.key, required this.isBack});
+  final Order? order;
+  const NewOrderView({super.key, required this.isBack, this.order});
 
   @override
   State<NewOrderView> createState() => _NewOrderViewState();
@@ -35,7 +37,7 @@ class _NewOrderViewState extends State<NewOrderView> {
   bool contr1 = false;
   bool contr2 = false;
   int? selectedIndex;
-  List<Cleint> cleints = [];
+  List<Client> clients = [];
   @override
   void initState() {
     _formKeys = GlobalKey<FormState>();
@@ -43,8 +45,21 @@ class _NewOrderViewState extends State<NewOrderView> {
     deviceController = TextEditingController();
     descriptionController = TextEditingController();
 
+    if (widget.order != null) {
+      int? clientId = widget.order!.client.id;
+      // Поиск клиента с указанным идентификатором в списке клиентов
+      int index = clients.indexWhere((client) => client.id == clientId);
+
+      // Если клиент найден, установите индекс
+      if ((index + 1) != -1) {
+        selectedIndex = (index + 1);
+      }
+
+      deviceController.text = widget.order!.device;
+      descriptionController.text = widget.order!.description ?? '';
+    }
     deviceController.addListener(_updateControllerState);
-   BlocProvider.of<CleintBloc>(context).add(GetAllClient());
+    BlocProvider.of<ClientBloc>(context).add(GetAllClient());
 
     super.initState();
   }
@@ -57,13 +72,13 @@ class _NewOrderViewState extends State<NewOrderView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<CleintBloc, CleintState>(listener: (context, state) {
-      if (state is CleintLoaded) {
-        cleints = state.response;
-      } else if (state is CleintErrorState) {
+    return BlocConsumer<ClientBloc, ClientState>(listener: (context, state) {
+      if (state is ClientLoaded) {
+        clients = state.response;
+      } else if (state is ClientErrorState) {
         showCustomSnackBar(context, state.message);
       }
-    }, builder: (context, snapshot) {
+    }, builder: (context, state) {
       return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
         appBar: AppBar(
@@ -89,14 +104,17 @@ class _NewOrderViewState extends State<NewOrderView> {
             onPressed: () {
               if (_formKeys.currentState!.validate()) {
                 if (selectedIndex != null) {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => NewOrderSecondView(
-                            cleint: cleints[selectedIndex!],
-                              isBack: true,
-                              device: deviceController.text,
-                              decs: descriptionController.text)));
+                  if(widget.order != null)
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => NewOrderSecondView(
+                              order: widget.order,
+                                client: clients[selectedIndex!],
+                                isBack: true,
+                                device: deviceController.text,
+                                decs: descriptionController.text)));
+                  
                 } else {
                   showCustomSnackBar(context, 'please select a client');
                 }
@@ -162,11 +180,10 @@ class _NewOrderViewState extends State<NewOrderView> {
                                   ),
                                   SizedBox(width: 50),
                                   DeviceContainer(
-                                    cleint: cleints.isNotEmpty
-                                        ? cleints[selectedIndex!]
+                                    client: clients.isNotEmpty
+                                        ? clients[selectedIndex!]
                                         : null,
                                     onPressed: () {
-                                      
                                       showModalBottomSheet(
                                         context: context,
                                         isScrollControlled: true,
@@ -182,14 +199,12 @@ class _NewOrderViewState extends State<NewOrderView> {
                                                     .bottom,
                                               ),
                                               child: SelectDeviceWidget(
-                                                  
                                                   onPressed: (index) {
                                                     setState(() {
                                                       selectedIndex = index;
-                                                      print(index);
                                                     });
                                                   },
-                                                  cleints: cleints));
+                                                  clients: clients));
                                         },
                                       ).then((value) {
                                         setState(() {});
@@ -219,14 +234,12 @@ class _NewOrderViewState extends State<NewOrderView> {
                                                     .bottom,
                                               ),
                                               child: SelectDeviceWidget(
-                                               
                                                 onPressed: (index) {
                                                   setState(() {
                                                     selectedIndex = index;
-                                                    print(index);
                                                   });
                                                 },
-                                                cleints: cleints,
+                                                clients: clients,
                                               ));
                                         },
                                       ).then((value) {
@@ -242,7 +255,7 @@ class _NewOrderViewState extends State<NewOrderView> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  NewCleintView(
+                                                  NewClientView(
                                                     isBack: true,
                                                   )));
                                     },

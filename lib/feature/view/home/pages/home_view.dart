@@ -27,28 +27,32 @@ class Homeview extends StatefulWidget {
 class _HomeviewState extends State<Homeview> {
   bool isTab1 = true;
   bool isTab2 = false;
-  List<Cleint> cleints = [];
-  List<Order> orders = [];
+  List<Client?> Clients = [];
+  List<Order?> orders = [];
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
-    BlocProvider.of<CleintBloc>(context).add(GetAllClient());
+    BlocProvider.of<ClientBloc>(context).add(GetAllClient());
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<CleintBloc, CleintState>(listener: (context, state) {
-      if (state is CleintLoaded) {
-        cleints = state.response;
-      } else if (state is CleintErrorState) {
+    return BlocConsumer<ClientBloc, ClientState>(listener: (context, state) {
+      if (state is ClientLoaded) {
+       setState(() {
+          Clients = state.response;
+       });
+      } else if (state is ClientErrorState) {
         showCustomSnackBar(context, state.message);
       }
     }, builder: (context, snapshot) {
       return BlocConsumer<OrderBloc, OrderState>(listener: (context, state) {
         if (state is OrderLoaded) {
-          orders = state.response;
+         setState(() {
+            orders = state.response ?? [];
+         });
         } else if (state is ErrorState) {
           showCustomSnackBar(context, state.message);
         }
@@ -89,7 +93,7 @@ class _HomeviewState extends State<Homeview> {
                                           value2: '2',
                                           value3: '3',
                                           value4: '4',
-                                          name: 'Cleint Name',
+                                          name: 'Client Name',
                                         ),
                                       ])
                                 : Column(
@@ -139,7 +143,7 @@ class _HomeviewState extends State<Homeview> {
                             padding: EdgeInsets.zero,
                             onPressed: () {
                               setState(() {
-                                BlocProvider.of<CleintBloc>(context)
+                                BlocProvider.of<ClientBloc>(context)
                                     .add(GetAllClient());
                                 isTab1 = true;
                                 isTab2 = false;
@@ -220,7 +224,7 @@ class _HomeviewState extends State<Homeview> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    NewCleintView(isBack: true)));
+                                    NewClientView(isBack: true)));
                       } else {
                         Navigator.push(
                             context,
@@ -244,7 +248,7 @@ class _HomeviewState extends State<Homeview> {
                   ),
                   SizedBox(height: 20),
                   if (isTab1)
-                    cleints.isNotEmpty
+                    Clients.isNotEmpty
                         ? GridView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
@@ -255,16 +259,20 @@ class _HomeviewState extends State<Homeview> {
                                     crossAxisSpacing: 12.0,
                                     mainAxisSpacing: 22.0,
                                     childAspectRatio: 0.9),
-                            itemCount: cleints.length,
+                            itemCount: Clients.length,
                             itemBuilder: (BuildContext context, int index) {
+                            
                               return DeviceContainer(
-                                  cleint: cleints[index],
+                                  client: Clients[index],
                                   onPressed: () {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                CustomersListView()));
+                                                CustomersListView(
+                                                  client: Clients[index]!,
+                                                )));
+                                                
                                   },
                                   selected: false);
                             },
@@ -297,11 +305,11 @@ class _HomeviewState extends State<Homeview> {
                             itemCount: orders.length,
                             itemBuilder: (BuildContext context, int index) {
                               return OrderContainer(
-                                  cleint: null,
-                                  nameDevice: 'Name Device',
-                                  listImageFile: [],
-                                  name: 'Name Cleintjskadnkjasndkjsna',
-                                  date: '17 March, 2024',
+                                  client: orders[index]!.client,
+                                 
+                                 
+                                 
+                                  order: orders[index]!,
                                   onPressed: () {
                                     setState(() {
                                       // selectedIndex = index;
