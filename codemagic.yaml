@@ -8,7 +8,7 @@ workflows:
     environment:
       ios_signing:
         distribution_type: app_store
-        bundle_identifier: com.tIMwi.sePP40
+        bundle_identifier: com.feVsR.PRpp71
       flutter: stable
       xcode: latest
       cocoapods: default
