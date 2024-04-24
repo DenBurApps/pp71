@@ -161,9 +161,9 @@ class _PrivacyAgreementPageState extends State<PrivacyAgreementPage> {
                             SizedBox(
                                 width: constraints.maxWidth * 0.9,
                                 height: 60,
-                                child: AppButton(
-                                    onPressed: _agree,
-                                    label: 'Agree with privacy')),
+                                child: _AgreementButton(
+                                    agree: _agree,
+                                   )),
                       ),
                     ),
                   ),
@@ -198,14 +198,14 @@ class _AgreementButton extends StatelessWidget {
               color: Theme.of(context).colorScheme.primary,
               borderRadius: BorderRadius.circular(20)),
           width: double.infinity,
-          height: 50,
+          height: 60,
           child: Text(
             'Agree with privacy',
             textAlign: TextAlign.center,
             style: Theme.of(context)
                 .textTheme
-                .labelLarge!
-                .copyWith(color: Colors.white),
+                .headlineMedium!
+                .copyWith(color: Colors.black),
           ),
         ),
       ),

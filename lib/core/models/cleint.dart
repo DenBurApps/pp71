@@ -1,15 +1,30 @@
-import 'dart:convert';
+import 'package:hive/hive.dart';
 
-import 'package:pp71/core/models/order.dart';
+part 'cleint.g.dart';
 
-class Client {
+@HiveType(typeId: 0)
+class Client extends HiveObject {
+  @HiveField(0)
   int? id;
-  final String name;
-  final String surname;
-  final String notes;
-  final String phone;
-  final String email;
-  final List<Order?> orders;
+
+  @HiveField(1)
+  String name;
+
+  @HiveField(2)
+  String surname;
+
+  @HiveField(3)
+  String notes;
+
+  @HiveField(4)
+  String phone;
+
+  @HiveField(5)
+  String email;
+
+  // Список заказов данного клиента
+  @HiveField(6)
+  List<int> orderIds;
 
   Client({
     this.id,
@@ -18,32 +33,6 @@ class Client {
     required this.notes,
     required this.phone,
     required this.email,
-    required this.orders,
+    required this.orderIds,
   });
-
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'id': id,
-      'name': name,
-      'surname': surname,
-      'notes': notes,
-      'phone': phone,
-      'email': email,
-      'orders':
-          jsonEncode(orders.map((order) => order?.toMap() ?? {}).toList()),
-    };
-  }
-
-  factory Client.fromMap(Map<String, dynamic> map) {
-    return Client(
-      id: map['id'],
-      name: map['name'] as String,
-      surname: map['surname'] as String,
-      notes: map['notes'] as String,
-      phone: map['phone'] as String,
-      email: map['email'] as String,
-      orders: List<Order>.from((jsonDecode(map['orders']) as List<dynamic>)
-          .map((materialMap) => Order.fromMap(materialMap))),
-    );
-  }
 }

@@ -15,10 +15,12 @@ import 'package:pp71/feature/view/home/pages/orders_view.dart';
 class SelectDeviceWidget extends StatefulWidget {
   final Function(int) onPressed;
   final List<Client> clients;
+  final List<Order?> orders;
   const SelectDeviceWidget({
     super.key,
     required this.onPressed,
     required this.clients,
+    required this.orders,
   });
 
   @override
@@ -77,12 +79,14 @@ class _SelectDeviceWidgetState extends State<SelectDeviceWidget> {
           const SizedBox(height: 20),
           Expanded(
               child: GridClient(
-                  client: widget.clients,
-                  onPressed: (index) {
-                    setState(() {
-                      selectedIndex = index;
-                    });
-                  })),
+            client: widget.clients,
+            onPressed: (index) {
+              setState(() {
+                selectedIndex = index;
+              });
+            },
+            order: widget.orders,
+          )),
         ],
       ),
     );
@@ -92,10 +96,12 @@ class _SelectDeviceWidgetState extends State<SelectDeviceWidget> {
 class GridClient extends StatefulWidget {
   final Function(int) onPressed;
   final List<Client> client;
+  final List<Order?> order;
   const GridClient({
     super.key,
     required this.onPressed,
     required this.client,
+    required this.order,
   });
 
   @override
@@ -125,7 +131,9 @@ class _GridClientState extends State<GridClient> {
                         widget.onPressed.call(index);
                       });
                     },
-                    selected: selectedIndex == index);
+                    selected: selectedIndex == index,
+                    orders: filterOrdersByClient(
+                        widget.order, widget.client[index].orderIds));
               } else {
                 return const SizedBox();
               }
@@ -149,8 +157,15 @@ class _GridClientState extends State<GridClient> {
   }
 }
 
+List<Order?> filterOrdersByClient(List<Order?> listOrder, List<int> orderIds) {
+  return listOrder
+      .where((order) => order != null && orderIds.contains(order.clientId))
+      .toList();
+}
+
 class DeviceContainer extends StatelessWidget {
   final Client? client;
+  final List<Order?> orders;
   final Function() onPressed;
 
   final bool selected;
@@ -158,7 +173,8 @@ class DeviceContainer extends StatelessWidget {
       {super.key,
       required this.onPressed,
       required this.selected,
-      required this.client});
+      required this.client,
+      required this.orders});
 
   @override
   Widget build(BuildContext context) {
@@ -182,7 +198,7 @@ class DeviceContainer extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text('${countActiveOrders(client?.orders)} active orders',
+            Text('${countActiveOrders(orders)} active orders',
                 style: Theme.of(context)
                     .textTheme
                     .labelMedium!
@@ -198,7 +214,7 @@ class DeviceContainer extends StatelessWidget {
                             : Theme.of(context).colorScheme.onBackground,
                       )),
             ),
-            Text('${countOrders(client?.orders)} orders',
+            Text('${client?.orderIds.length} orders',
                 style: Theme.of(context)
                     .textTheme
                     .labelMedium!
@@ -210,7 +226,6 @@ class DeviceContainer extends StatelessWidget {
   }
 
   int countOrders(List<Order?>? orders) {
-
     if (orders == null || orders.isEmpty) {
       return 0;
     }
@@ -237,7 +252,7 @@ class DeviceContainer extends StatelessWidget {
 
 class OrderContainer extends StatelessWidget {
   final Function() onPressed;
-  final Client client;
+  final Client? client;
 
   final Order order;
 
@@ -252,15 +267,15 @@ class OrderContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoButton(
-      onPressed:  () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => OrdersListView(
-                            client: client,
-                            order: order,
-                          )));
-            },
+      onPressed: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => OrdersListView(
+                      client: client,
+                      order: order,
+                    )));
+      },
       padding: const EdgeInsets.only(bottom: 20),
       child: Container(
           height: 220,
@@ -301,9 +316,8 @@ class OrderContainer extends StatelessWidget {
                               ),
                               child: Center(
                                 child: ClipRRect(
-                                    borderRadius:
-                                        const BorderRadius.all(
-                                            Radius.circular(15)),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(15)),
                                     child: Image.file(
                                       File(order.photos[index]),
                                       fit: BoxFit.fill,
@@ -348,7 +362,7 @@ class OrderContainer extends StatelessWidget {
                         Assets.icons.userAltLight.svg(),
                         const SizedBox(width: 5),
                         Expanded(
-                          child: Text(order.client.name,
+                          child: Text(client?.name ?? '',
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: Theme.of(context)

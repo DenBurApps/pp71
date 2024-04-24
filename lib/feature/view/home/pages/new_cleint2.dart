@@ -6,14 +6,12 @@ import 'package:linear_progress_bar/linear_progress_bar.dart';
 
 import 'package:pp71/core/generated/assets.gen.dart';
 import 'package:pp71/core/models/cleint.dart';
-import 'package:pp71/core/models/order.dart';
 import 'package:pp71/core/utils/show_custom_snack_bar.dart';
 import 'package:pp71/core/widgets/app_button.dart';
 import 'package:pp71/core/widgets/feilds/names.dart';
 import 'package:pp71/core/widgets/feilds/numeric_fields.dart';
 import 'package:pp71/core/widgets/icon_button.dart';
 import 'package:pp71/feature/controller/client_bloc/client_bloc.dart';
-import 'package:pp71/feature/controller/order_bloc/order_bloc.dart';
 import 'package:pp71/feature/view/home/pages/home_view.dart';
 import 'package:pp71/feature/view/home/pages/new_order.dart';
 
@@ -70,6 +68,7 @@ class _NewClientSecondViewState extends State<NewClientSecondView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
         centerTitle: true,
@@ -87,39 +86,12 @@ class _NewClientSecondViewState extends State<NewClientSecondView> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: AppButton(
           onPressed: () {
             if (_formKeys.currentState!.validate()) {
               if (widget.isBack) {
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => const Homeview()),
-                    (Route route) => false);
                 if (widget.client != null) {
-                  if (widget.client!.orders.isNotEmpty) {
-                    print(widget.client!.orders.last!.id);
-                    print(widget.client!.orders.last!.startTime);
-                    print(widget.client!.orders.last!.device);
-                    
-                    BlocProvider.of<OrderBloc>(context).add(UpdateOrder(
-                        model: Order(
-                      id: widget.client!.orders.last!.id,
-                      device: widget.client!.orders.last!.device,
-                      description: widget.client!.orders.last!.description,
-                      client: Client(
-                        name: widget.name,
-                        surname: widget.surName,
-                        notes: descriptionController.text,
-                        phone: phoneController.text,
-                        email: emailController.text,
-                        orders: widget.client!.orders,
-                      ),
-                      photos: widget.client!.orders.last!.photos,
-                      startTime: widget.client!.orders.last!.startTime,
-                      endTime: widget.client!.orders.last!.endTime,
-                    )));
-                  } 
                   BlocProvider.of<ClientBloc>(context).add(UpdateClient(
                       model: Client(
                     id: widget.client!.id,
@@ -128,10 +100,8 @@ class _NewClientSecondViewState extends State<NewClientSecondView> {
                     notes: descriptionController.text,
                     phone: phoneController.text,
                     email: emailController.text,
-                    orders: widget.client!.orders,
+                    orderIds: widget.client!.orderIds,
                   )));
-                  
-
                 } else {
                   BlocProvider.of<ClientBloc>(context).add(AddClient(
                       model: Client(
@@ -140,9 +110,13 @@ class _NewClientSecondViewState extends State<NewClientSecondView> {
                     notes: descriptionController.text,
                     phone: phoneController.text,
                     email: emailController.text,
-                    orders: [],
+                    orderIds: [],
                   )));
                 }
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Homeview()),
+                    (Route route) => false);
               } else {
                 Navigator.push(
                     context,

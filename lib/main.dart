@@ -1,22 +1,25 @@
+import 'dart:developer';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app_info/flutter_app_info.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pp71/core/config/injection.dart';
 import 'package:pp71/core/routes/routes.dart';
 import 'package:pp71/core/theme/theme.dart';
 import 'package:pp71/feature/controller/client_bloc/client_bloc.dart';
 import 'package:pp71/feature/controller/order_bloc/order_bloc.dart';
-import 'package:pp71/feature/view/home/pages/home_view.dart';
-import 'package:pp71/feature/view/home/start/onb/onboarding_view.dart';
+import 'package:pp71/firebase_options.dart';
 import 'package:theme_provider/theme_provider.dart';
 
 Future<void> main() async {
-  // final widgetsBinding =
-   WidgetsFlutterBinding.ensureInitialized();
-  // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await _initApp();
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -29,19 +32,19 @@ Future<void> main() async {
 }
 
 Future<void> _initApp() async {
-  // try {
-  //   await Firebase.initializeApp(
-  //       options: DefaultFirebaseOptions.currentPlatform);
-  //   FlutterError.onError = (errorDetails) {
-  //     FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
-  //   };
-  //   PlatformDispatcher.instance.onError = (error, stack) {
-  //     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-  //     return true;
-  //   };
-  // } on Exception catch (e) {
-  //   log("Failed to initialize Firebase: $e");
-  // }
+  try {
+    await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform);
+    FlutterError.onError = (errorDetails) {
+      FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+    };
+    PlatformDispatcher.instance.onError = (error, stack) {
+      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+      return true;
+    };
+  } on Exception catch (e) {
+    log("Failed to initialize Firebase: $e");
+  }
   await ServiceLocator.setup();
 }
 
@@ -50,14 +53,12 @@ class MealPlaner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return 
-    MultiBlocProvider(
+    return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => GetIt.instance<ClientBloc>()),
         BlocProvider(create: (context) => GetIt.instance<OrderBloc>()),
       ],
-      child: 
-      ThemeProvider(
+      child: ThemeProvider(
         defaultThemeId: DefaultTheme.dark.id,
         saveThemesOnChange: true,
         onInitCallback: (controller, previouslySavedThemeFuture) async {
@@ -73,10 +74,10 @@ class MealPlaner extends StatelessWidget {
         child: ThemeConsumer(
           child: Builder(
             builder: (context) => MaterialApp(
-              title: 'MendMate',
+              title: 'Device Repair Manager',
               routes: Routes.get(context),
               // home: const OnboardingView(),
-              
+
               debugShowCheckedModeBanner: false,
               theme: ThemeProvider.themeOf(context).data,
             ),

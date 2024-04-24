@@ -15,6 +15,7 @@ class DeleteClient extends ClientEvent {
 class UpdateClient extends ClientEvent {
   final Client model;
 
+
   const UpdateClient({required this.model});
 }
 class AddClient extends ClientEvent {

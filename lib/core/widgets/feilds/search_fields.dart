@@ -80,7 +80,7 @@ class _SearchFieldWidgetState extends State<SearchFieldWidget> {
             }
             return null;
           },
-          enableInteractiveSelection: false,
+           enableInteractiveSelection: true, 
         ),
       ),
     );

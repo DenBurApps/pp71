@@ -74,7 +74,7 @@ class _NamesFieldWidgetState extends State<NamesFieldWidget> {
           keyboardType: TextInputType.text,
           onChanged: widget.onChanged,
           validator: widget.validator,
-          enableInteractiveSelection: false,
+           enableInteractiveSelection: true, 
           onTap: () {
             setState(() {
               isFocused = true;
@@ -151,6 +151,7 @@ class _DescriptionFieldWidgetState extends State<DescriptionFieldWidget> {
         keyboardType: TextInputType.multiline,
         maxLines: null,
         onChanged: widget.onChanged,
+        
         validator: (value) {
           if (value == null || value.isEmpty) {
             setState(() {
@@ -160,7 +161,7 @@ class _DescriptionFieldWidgetState extends State<DescriptionFieldWidget> {
           }
           return null;
         },
-        enableInteractiveSelection: false,
+        enableInteractiveSelection: true, 
         onTap: () {
           setState(() {
             isFocused = true;
@@ -200,6 +201,7 @@ class _EmailFieldWidgetState extends State<EmailFieldWidget> {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10),
+      
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.secondary,
         borderRadius: BorderRadius.circular(30),
@@ -241,7 +243,8 @@ class _EmailFieldWidgetState extends State<EmailFieldWidget> {
           keyboardType: TextInputType.text,
           onChanged: widget.onChanged,
           validator: widget.validator,
-          enableInteractiveSelection: false,
+          
+           enableInteractiveSelection: true, 
           onTap: () {
             setState(() {
               isFocused = true;

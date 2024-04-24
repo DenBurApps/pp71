@@ -138,7 +138,8 @@ class _RateUsDialogState extends State<RateUsDialog> {
 }
 
 void showRateUsDialog(BuildContext context, ThemeData theme) {
-  showCupertinoDialog(
+  showDialog(
+     barrierColor: Theme.of(context).colorScheme.background.withOpacity(0.8),
     context: context,
     builder: (context) => RateUsDialog(theme: theme),
   );

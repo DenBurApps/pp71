@@ -37,11 +37,12 @@ class _SupportViewState extends State<SupportView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.secondary.withOpacity(0.1),
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.only(left: 16, right: 16, top: 25),
-          color: Theme.of(context).colorScheme.secondary.withOpacity(0.5),
+          color: Theme.of(context).colorScheme.secondary.withOpacity(0.1),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

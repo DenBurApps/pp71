@@ -10,12 +10,14 @@ class GetAllOrder extends OrderEvent {}
 class DeleteOrder extends OrderEvent {
   final Order model;
 
-  const DeleteOrder({required this.model});
+
+  const DeleteOrder( {required this.model});
 }
 class UpdateOrder extends OrderEvent {
   final Order model;
+ 
 
-  const UpdateOrder({required this.model});
+  const UpdateOrder( {required this.model});
 }
 class AddOrder extends OrderEvent {
   final Order model;

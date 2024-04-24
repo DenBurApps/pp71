@@ -7,6 +7,7 @@ import 'package:pp71/core/utils/contact_dev.dart';
 import 'package:pp71/core/utils/dialog_helper.dart';
 import 'package:pp71/core/widgets/icon_button.dart';
 import 'package:pp71/core/widgets/rate_us.dart';
+import 'package:pp71/core/widgets/support.dart';
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({super.key});
@@ -71,22 +72,24 @@ class _CustomDrawerState extends State<CustomDrawer> {
             SettingsButtonWidget(
                 title: 'About Us',
                 onPressed: () {
-                  showModalBottomSheet(
-                    context: context,
-                    isScrollControlled: true,
-                    builder: (BuildContext context) {
-                      return SingleChildScrollView(
-                        padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).viewInsets.bottom,
-                        ),
-                        child: showContactDevoloper(context, controller),
-                      );
-                    },
-                  ).then((value) {
-                    setState(() {
-                      controller.clear();
-                    });
-                  });
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => SupportView()));
+                  // showModalBottomSheet(
+                  //   context: context,
+                  //   isScrollControlled: true,
+                  //   builder: (BuildContext context) {
+                  //     return SingleChildScrollView(
+                  //       padding: EdgeInsets.only(
+                  //         bottom: MediaQuery.of(context).viewInsets.bottom,
+                  //       ),
+                  //       child: (context, controller),
+                  //     );
+                  //   },
+                  // ).then((value) {
+                  //   setState(() {
+                  //     controller.clear();
+                  //   });
+                  // });
                 }),
             SettingsButtonWidget(
                 title: 'Privacy Policy',

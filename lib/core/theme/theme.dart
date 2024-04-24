@@ -61,57 +61,57 @@ class DefaultTheme {
 
   static final textTheme = TextTheme(
     displayLarge: GoogleFonts.josefinSans(
-        fontSize: 26,
+        fontSize: 23,
         fontWeight: FontWeight.w500,
         color: const Color.fromRGBO(255, 255, 255, 1),
       ),
     displayMedium: GoogleFonts.josefinSans(
-      fontSize: 24,
+      fontSize: 23,
       fontWeight: FontWeight.w600,
       color: const Color.fromRGBO(255, 255, 255, 1),
     ),
     displaySmall: GoogleFonts.josefinSans(
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: FontWeight.w500,
         color: const Color.fromRGBO(255, 255, 255, 1),
         ),
     bodyLarge: GoogleFonts.josefinSans(
-      fontSize: 16,
+      fontSize: 14,
       fontWeight: FontWeight.w500,
       color: const Color.fromRGBO(255, 255, 255, 1),
     ),
     bodyMedium: GoogleFonts.josefinSans(
-      fontSize: 16,
-      fontWeight: FontWeight.w500,
-      color: const Color.fromRGBO(255, 255, 255, 1),
-    ),
-    bodySmall: GoogleFonts.josefinSans(
-      fontSize: 16,
-      fontWeight: FontWeight.w300,
-      color: const Color.fromRGBO(255, 255, 255, 1),
-    ),
-    labelLarge: GoogleFonts.josefinSans(
-      fontSize: 14,
-      fontWeight: FontWeight.w300,
-      color: const Color.fromRGBO(255, 255, 255, 1),
-    ),
-    labelMedium: GoogleFonts.josefinSans(
-      fontSize: 12,
-      fontWeight: FontWeight.w600,
-      color: const Color.fromRGBO(255, 255, 255, 1),
-    ),
-    labelSmall: GoogleFonts.josefinSans(
       fontSize: 15,
       fontWeight: FontWeight.w500,
       color: const Color.fromRGBO(255, 255, 255, 1),
     ),
-    titleSmall: GoogleFonts.josefinSans(
+    bodySmall: GoogleFonts.josefinSans(
+      fontSize: 15,
+      fontWeight: FontWeight.w300,
+      color: const Color.fromRGBO(255, 255, 255, 1),
+    ),
+    labelLarge: GoogleFonts.josefinSans(
+      fontSize: 13,
+      fontWeight: FontWeight.w300,
+      color: const Color.fromRGBO(255, 255, 255, 1),
+    ),
+    labelMedium: GoogleFonts.josefinSans(
+      fontSize: 11,
+      fontWeight: FontWeight.w600,
+      color: const Color.fromRGBO(255, 255, 255, 1),
+    ),
+    labelSmall: GoogleFonts.josefinSans(
       fontSize: 14,
       fontWeight: FontWeight.w500,
       color: const Color.fromRGBO(255, 255, 255, 1),
     ),
+    titleSmall: GoogleFonts.josefinSans(
+      fontSize: 13,
+      fontWeight: FontWeight.w500,
+      color: const Color.fromRGBO(255, 255, 255, 1),
+    ),
     headlineMedium: GoogleFonts.josefinSans(
-      fontSize: 18,
+      fontSize: 16,
       fontWeight: FontWeight.w500,
       color: const Color.fromRGBO(255, 255, 255, 1),
     ),

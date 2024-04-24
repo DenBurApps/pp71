@@ -12,7 +12,7 @@ typedef AppRoute = Widget Function(BuildContext context);
 
 class Routes {
   static Map<String, AppRoute> get(BuildContext context) => {
-        RouteNames.splash: (context) => const OnboardingView(),
+        RouteNames.splash: (context) => const SplashPage(),
         RouteNames.pages: (context) => const Homeview(),
         RouteNames.support: (context) => const SupportView(),
         RouteNames.privacyAgreement: (context) => const PrivacyAgreementPage(),

@@ -12,7 +12,6 @@ import 'package:pp71/feature/controller/order_bloc/order_bloc.dart';
 import 'package:pp71/feature/view/home/pages/customers_view.dart';
 import 'package:pp71/feature/view/home/pages/new_cleint.dart';
 import 'package:pp71/feature/view/home/pages/new_order.dart';
-
 import '../../widgets/select_device.dart';
 
 class Homeview extends StatefulWidget {
@@ -27,35 +26,128 @@ class _HomeviewState extends State<Homeview> {
   bool isTab2 = false;
   List<Client?> clients = [];
   List<Order?> orders = [];
+  List<Order?> newListOrder = [];
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
     BlocProvider.of<ClientBloc>(context).add(GetAllClient());
-
+    BlocProvider.of<OrderBloc>(context).add(GetAllOrder());
     super.initState();
+  }
+
+  String _formatActiveOrders(String count) {
+    if (count.length == 1) {
+      return '0$count';
+    } else {
+      return count;
+    }
+  }
+
+  String countBeforeOrders(List<Order?>? orders) {
+    if (orders == null || orders.isEmpty) {
+      return '0';
+    }
+
+    DateTime now = DateTime.now();
+    int activeOrders = 0;
+
+    for (Order? order in orders) {
+      if (order!.endTime.isBefore(now)) {
+        activeOrders++;
+      }
+    }
+
+    return activeOrders.toString();
+  }
+
+  String countActiveOrders(List<Order?>? orders) {
+    if (orders == null || orders.isEmpty) {
+      return '0';
+    }
+
+    DateTime now = DateTime.now();
+    int activeOrders = 0;
+
+    for (Order? order in orders) {
+      if (order!.endTime.isAfter(now)) {
+        activeOrders++;
+      }
+    }
+
+    return activeOrders.toString();
+  }
+
+  String countClientActiveOrders(
+      List<Client?> clientss, List<Order?> orderList) {
+    // print(orders?.length);
+    if (orders.isEmpty) {
+      return '0';
+    }
+
+    DateTime now = DateTime.now();
+    int activeOrders = 0;
+
+    for (Client? client in clientss) {
+      List<Order?> newListOrder =
+          filterOrdersByClient(orderList, client!.orderIds);
+
+      List<Order?> oredeeers = newListOrder;
+      if (orderList.isNotEmpty) {
+        for (Order? order in oredeeers) {
+          if (order!.endTime.isAfter(now)) {
+            activeOrders++;
+          }
+        }
+      }
+    }
+
+    return activeOrders.toString();
+  }
+
+  String numberOfOrders(List<Order?> orderList) {
+    // print(orders?.length);
+    if (orderList.isEmpty) {
+      return '0';
+    }
+
+    int activeOrders = 0;
+
+    // ignore: unused_local_variable
+    for (Order? order in orderList) {
+      activeOrders = activeOrders + orderList.length;
+    }
+    return activeOrders.toString();
+  }
+
+  List<Order?> filterOrdersByClient(
+      List<Order?> listOrder, List<int> orderIds) {
+    return listOrder
+        .where((order) => order != null && orderIds.contains(order.clientId))
+        .toList();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ClientBloc, ClientState>(listener: (context, state) {
       if (state is ClientLoaded) {
-       setState(() {
+        setState(() {
           clients = state.response;
-       });
+        });
       } else if (state is ClientErrorState) {
         showCustomSnackBar(context, state.message);
       }
     }, builder: (context, snapshot) {
       return BlocConsumer<OrderBloc, OrderState>(listener: (context, state) {
         if (state is OrderLoaded) {
-         setState(() {
+          setState(() {
             orders = state.response;
-         });
+          });
         } else if (state is ErrorState) {
           showCustomSnackBar(context, state.message);
         }
       }, builder: (context, snapshot) {
         return Scaffold(
+          resizeToAvoidBottomInset: false,
           key: _scaffoldKey,
           backgroundColor: Theme.of(context).colorScheme.background,
           appBar: AppBar(
@@ -75,40 +167,53 @@ class _HomeviewState extends State<Homeview> {
                             padding: const EdgeInsets.symmetric(
                                 vertical: 20, horizontal: 20),
                             child: isTab1
-                                ? const Column(
+                                ? Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                        TopStatck(),
-                                        SizedBox(height: 20),
+                                        const TopStatck(),
+                                        const SizedBox(height: 20),
                                         StatickContainers(
-                                          value1: '1',
-                                          value2: '2',
+                                          value1: _formatActiveOrders(
+                                              clients.length.toString())[0],
+                                          value2: _formatActiveOrders(
+                                              clients.length.toString())[1],
                                           isBlack: false,
                                         ),
-                                        SizedBox(height: 30),
+                                        const SizedBox(height: 30),
                                         StatickContainerSecond(
-                                          value1: '1',
-                                          value2: '2',
-                                          value3: '3',
-                                          value4: '4',
+                                          value1: _formatActiveOrders(
+                                              countClientActiveOrders(
+                                                  clients, orders))[0],
+                                          value2: _formatActiveOrders(
+                                              countClientActiveOrders(
+                                                  clients, orders))[1],
+                                          value3: _formatActiveOrders(
+                                              numberOfOrders(orders))[0],
+                                          value4: _formatActiveOrders(
+                                              numberOfOrders(orders))[1],
                                           name: 'Client Name',
                                         ),
                                       ])
-                                : const Column(
+                                : Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      TopStatck(),
-                                      SizedBox(height: 20),
+                                      const TopStatck(),
+                                      const SizedBox(height: 20),
                                       StatickContainers(
-                                        value1: '1',
-                                        value2: '2',
+                                        value1: _formatActiveOrders(
+                                            orders.length.toString())[0],
+                                        value2: _formatActiveOrders(
+                                            orders.length.toString())[1],
                                         isBlack: false,
                                       ),
-                                      SizedBox(height: 30),
+                                      const SizedBox(height: 30),
                                       StatickContainerOrderSecond(
-                                        value1: '1',
-                                        value2: '2',
-                                        value3: '3',
+                                        value1: _formatActiveOrders(
+                                            countBeforeOrders(orders))[0],
+                                        value2: _formatActiveOrders(
+                                            countBeforeOrders(orders))[1],
+                                        value3: _formatActiveOrders(
+                                            countActiveOrders(orders))[1],
                                       ),
                                     ],
                                   ),
@@ -236,7 +341,8 @@ class _HomeviewState extends State<Homeview> {
                           border: Border.all(
                               color: Theme.of(context).colorScheme.onBackground,
                               width: 2),
-                          borderRadius: const BorderRadius.all(Radius.circular(30))),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(30))),
                       height: 100,
                       width: MediaQuery.of(context).size.width,
                       child: Center(
@@ -259,10 +365,10 @@ class _HomeviewState extends State<Homeview> {
                                     childAspectRatio: 0.9),
                             itemCount: clients.length,
                             itemBuilder: (BuildContext context, int index) {
-                            
                               return DeviceContainer(
-                                  client: clients[index],
-                                  onPressed: () {
+                                client: clients[index],
+                                onPressed: () {
+                                  if (clients.isNotEmpty) {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -270,9 +376,12 @@ class _HomeviewState extends State<Homeview> {
                                                 CustomersListView(
                                                   client: clients[index]!,
                                                 )));
-                                                
-                                  },
-                                  selected: false);
+                                  }
+                                },
+                                selected: false,
+                                orders: filterOrdersByClient(
+                                    orders, clients[index]!.orderIds),
+                              );
                             },
                           )
                         : Center(
@@ -296,7 +405,7 @@ class _HomeviewState extends State<Homeview> {
                             ),
                           ),
                   if (isTab2)
-                    orders.isNotEmpty
+                    orders.isNotEmpty && clients.isNotEmpty
                         ? ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
@@ -304,12 +413,13 @@ class _HomeviewState extends State<Homeview> {
                             itemCount: orders.length,
                             itemBuilder: (BuildContext context, int index) {
                               return OrderContainer(
-                                  client: orders[index]!.client,
-                                 
-                                 
-                                 
+                                  client: clients.firstWhere(
+                                    (client) =>
+                                        client != null &&
+                                        client.id == orders[index]!.clientId,
+                                  ),
                                   order: orders[index]!,
-                                  onPressed: () {
+                                  onPressed: () async {
                                     setState(() {
                                       // selectedIndex = index;
                                       // widget.onPressed.call(index);

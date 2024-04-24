@@ -34,11 +34,9 @@ class SelectDateWidget extends StatefulWidget {
 }
 
 class _SelectDateWidgetState extends State<SelectDateWidget> {
-  DateTime? _focusedDay;
   DateTime? _selectedDay;
   @override
   void initState() {
-    _focusedDay = widget.focusedDay;
     _selectedDay = widget.selectedDay;
     super.initState();
   }
@@ -114,7 +112,7 @@ class _SelectDateWidgetState extends State<SelectDateWidget> {
                         color: Theme.of(context).colorScheme.secondary,
                       ),
                       child: TableCalendar(
-                        focusedDay: _focusedDay!,
+                        focusedDay: _selectedDay!,
                         firstDay: widget.firstDay,
                         lastDay: widget.lastDay,
                         sixWeekMonthsEnforced: false,
@@ -184,11 +182,11 @@ class _SelectDateWidgetState extends State<SelectDateWidget> {
                             isSameDay(day, _selectedDay),
                         onDaySelected: (selectedDay, focusedDay) {
                           setState(() {
-                            _focusedDay = focusedDay;
+                            _selectedDay = focusedDay;
                             _selectedDay = selectedDay;
                           });
 
-                          widget.onDaySelected.call(selectedDay, focusedDay);
+                          widget.onDaySelected.call(selectedDay, selectedDay);
                         },
                         calendarBuilders: CalendarBuilders(
                           headerTitleBuilder: (context, day) {

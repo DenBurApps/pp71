@@ -55,8 +55,10 @@ class _NewClientViewState extends State<NewClientView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+       resizeToAvoidBottomInset: false,
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
+        
         centerTitle: true,
         leading: widget.isBack
             ? CustomIconButton(
@@ -74,7 +76,7 @@ class _NewClientViewState extends State<NewClientView> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: AppButton(
           onPressed: () {
             if (_formKeys.currentState!.validate()) {

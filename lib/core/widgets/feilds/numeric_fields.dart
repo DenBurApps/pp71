@@ -77,10 +77,10 @@ class _NumericFieldState extends State<NumericField> {
         keyboardType: TextInputType.number,
         inputFormatters: [
           FilteringTextInputFormatter.digitsOnly,
-          LengthLimitingTextInputFormatter(9),
+          LengthLimitingTextInputFormatter(11),
         ],
         validator: widget.validator,
-        enableInteractiveSelection: false,
+        enableInteractiveSelection: true, 
         onTap: () {
           setState(() {
             isFocused = true;

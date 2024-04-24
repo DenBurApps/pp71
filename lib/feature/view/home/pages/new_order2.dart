@@ -74,6 +74,7 @@ class _NewOrderSecondViewState extends State<NewOrderSecondView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
         centerTitle: true,
@@ -91,120 +92,69 @@ class _NewOrderSecondViewState extends State<NewOrderSecondView> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: AppButton(
+          color: Theme.of(context).colorScheme.primaryContainer,
           isActive: _selectedDay1 != null || _selectedDay2 != null,
           onPressed: () {
             if (_selectedDay1 != null && _selectedDay2 != null) {
               if (_selectedDay1!.isBefore(_selectedDay2!)) {
-                if (widget.order != null) {
-                  Order newOrder = Order(
-                    id: widget.order!.id,
-                    client: Client(
-                        id: widget.client.id,
-                        name: widget.client.name,
-                        surname: widget.client.surname,
-                        notes: widget.client.surname,
-                        phone: widget.client.phone,
-                        email: widget.client.email,
-                        orders: widget.client.orders),
-                    device: widget.device,
-                    description: widget.decs,
-                    startTime: _selectedDay1!,
-                    endTime: _selectedDay2!,
-                    photos: _listImageFile,
-                  );
-                  List<Order?> listOrders = [];
-                  listOrders.addAll(widget.client.orders);
-                  listOrders.add(newOrder);
-
-                  BlocProvider.of<ClientBloc>(context).add(
-                    UpdateClient(
-                        model: Client(
-                            id: widget.client.id,
-                            name: widget.client.name,
-                            surname: widget.client.surname,
-                            notes: widget.client.surname,
-                            phone: widget.client.phone,
-                            email: widget.client.email,
-                            orders: listOrders)),
-                  );
-                  BlocProvider.of<OrderBloc>(context).add(UpdateOrder(
-                      model: Order(
-                    client: Client(
-                        id: widget.client.id,
-                        name: widget.client.name,
-                        surname: widget.client.surname,
-                        notes: widget.client.surname,
-                        phone: widget.client.phone,
-                        email: widget.client.email,
-                        orders: listOrders),
-                    device: widget.device,
-                    description: widget.decs,
-                    startTime: _selectedDay1!,
-                    endTime: _selectedDay2!,
-                    photos: _listImageFile,
-                  )));
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => Homeview()),
-                      (Route route) => false);
+                List<int> listint = [];
+                if (widget.client.orderIds.isNotEmpty) {
+                  listint.addAll(widget.client.orderIds);
+                  listint.add(widget.client.orderIds.last + 1);
                 } else {
-                  int? id = widget.client.orders.isNotEmpty
-                      ? widget.client.orders.last!.id! + 1
-                      : 0;
-                  Order newOrder = Order(
-                    id: id,
-                    client: Client(
-                        id: widget.client.id,
-                        name: widget.client.name,
-                        surname: widget.client.surname,
-                        notes: widget.client.surname,
-                        phone: widget.client.phone,
-                        email: widget.client.email,
-                        orders: widget.client.orders),
-                    device: widget.device,
-                    description: widget.decs,
-                    startTime: _selectedDay1!,
-                    endTime: _selectedDay2!,
-                    photos: _listImageFile,
-                  );
-                  List<Order?> listOrders = [];
-                  listOrders.addAll(widget.client.orders);
-                  listOrders.add(newOrder);
-
-                  BlocProvider.of<ClientBloc>(context).add(
-                    UpdateClient(
-                        model: Client(
-                            id: widget.client.id,
-                            name: widget.client.name,
-                            surname: widget.client.surname,
-                            notes: widget.client.surname,
-                            phone: widget.client.phone,
-                            email: widget.client.email,
-                            orders: listOrders)),
-                  );
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => const Homeview()),
-                      (Route route) => false);
-                  BlocProvider.of<OrderBloc>(context).add(AddOrder(
-                      model: Order(
-                    client: Client(
-                        id: widget.client.id,
-                        name: widget.client.name,
-                        surname: widget.client.surname,
-                        notes: widget.client.surname,
-                        phone: widget.client.phone,
-                        email: widget.client.email,
-                        orders: listOrders),
-                    device: widget.device,
-                    description: widget.decs,
-                    startTime: _selectedDay1!,
-                    endTime: _selectedDay2!,
-                    photos: _listImageFile,
-                  )));
+                  listint.add(1);
                 }
+
+                if (widget.order != null) {
+                  BlocProvider.of<OrderBloc>(context).add(
+                    UpdateOrder(
+                      model: Order(
+                        id: widget.order!.id!,
+                        clientId: widget.client.id!,
+                        device: widget.device,
+                        description: widget.decs,
+                        startTime: _selectedDay1!,
+                        endTime: _selectedDay2!,
+                        photos: _listImageFile,
+                      ),
+                    ),
+                  );
+                } else {
+                  BlocProvider.of<OrderBloc>(context).add(
+                    AddOrder(
+                      model: Order(
+                        clientId: widget.client.id!,
+                        device: widget.device,
+                        description: widget.decs,
+                        startTime: _selectedDay1!,
+                        endTime: _selectedDay2!,
+                        photos: _listImageFile,
+                      ),
+                    ),
+                  );
+                }
+
+                BlocProvider.of<ClientBloc>(context).add(
+                  UpdateClient(
+                    model: Client(
+                      id: widget.client.id,
+                      name: widget.client.name,
+                      surname: widget.client.surname,
+                      notes: widget.client.surname,
+                      phone: widget.client.phone,
+                      email: widget.client.email,
+                      orderIds: listint,
+                    ),
+                  ),
+                );
+
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Homeview()),
+                  (Route route) => false,
+                );
               } else {
                 showCustomSnackBar(context,
                     'The start date you choose must be before the end date. Please correct the selected dates.');

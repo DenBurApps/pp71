@@ -1,8 +1,8 @@
 class TextHelper {
   static const privacy = '''
-# Privacy Policy  for MendMate
+# Privacy Policy for Device Repair Manager
 
-Last updated: April 08, 2024
+Last updated: April 17, 2024
 
 This Privacy Policy describes Our policies and procedures on the collection, use and disclosure of Your information when You use the Service and tells You about Your privacy rights and how the law protects You.
 
@@ -112,13 +112,13 @@ We may update our Privacy Policy from time to time. Notification of changes will
 ## Contact Us
 If you have any questions about this Privacy Policy, you can contact us:
 
-- **By email:** [ghaffarahmad@sunnsup.website](ghaffarahmad@sunnsup.website)
+- **By email:** [m.saeed@chartrust.online](m.saeed@chartrust.online)
 ''';
 
   static const terms = '''
-# Terms and Conditions  for MendMate
+# Terms and Conditions for Device Repair Manager
 
-Last updated: April 08, 2024
+Last updated: April 17, 2024
 
 Please read these terms and conditions carefully before using Our Service.
 
@@ -209,7 +209,7 @@ By continuing to access or use Our Service after those revisions become effectiv
 ## Contact Us
 If you have any questions about these Terms and Conditions, You can contact us:
 
-- **By email:** [ghaffarahmad@sunnsup.website](ghaffarahmad@sunnsup.website)
+- **By email:** [m.saeed@chartrust.online](m.saeed@chartrust.online)
 
 ''';
 }
