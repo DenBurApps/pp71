@@ -7,12 +7,12 @@ class DialogHelper {
       await showCupertinoDialog(
         context: context,
         barrierDismissible: false,
-        builder: (context) => CupertinoAlertDialog(
+        builder: (context) => AlertDialog.adaptive(
           title: const Text('No Internet Connection'),
           content: const Text(
               'You have lost your internet connection. Please check your settings and try again.'),
           actions: <Widget>[
-            CupertinoDialogAction(
+            TextButton(
               child: const Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -31,7 +31,7 @@ class DialogHelper {
     await showCupertinoDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) => CupertinoAlertDialog(
+      builder: (context) => AlertDialog.adaptive(
         title: Text(info.package.appName),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -44,7 +44,7 @@ class DialogHelper {
           ],
         ),
         actions: <Widget>[
-          CupertinoDialogAction(
+          TextButton(
             onPressed: Navigator.of(context).pop,
             child: Text(
               'OK',

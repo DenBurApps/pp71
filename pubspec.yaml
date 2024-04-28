@@ -46,6 +46,7 @@ dependencies:
   linear_progress_bar: ^1.1.1
   calendar_date_picker2: ^0.5.5
   table_calendar: ^3.0.9
+  adaptive_dialog: ^2.1.0
 
 flutter_launcher_icons:
   android: "launcher_icon"
