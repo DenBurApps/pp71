@@ -1,4 +1,4 @@
-package com.feVsR.pp71
+package com.feVsR.PRpp71
 
 import io.flutter.embedding.android.FlutterActivity
 
