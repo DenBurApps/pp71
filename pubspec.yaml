@@ -3,7 +3,7 @@ description: "MendDate app"
 
 publish_to: 'none'
 
-version: 1.0.0+1
+version: 1.0.1+1
 
 environment:
   sdk: '>=3.2.3 <4.0.0'
@@ -64,7 +64,7 @@ dev_dependencies:
     sdk: flutter
 
 flutter_native_splash:
-  color: "#FFFFFF"
+  color: "#FFDD2D"
   image: assets/images/launcher.png
 
 flutter_gen:
