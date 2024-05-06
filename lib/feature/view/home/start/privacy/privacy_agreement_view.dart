@@ -14,7 +14,6 @@ import 'package:pp71/core/config/remote_config.dart';
 import 'package:pp71/core/keys/storage_keys.dart';
 import 'package:pp71/core/routes/routes.dart';
 import 'package:pp71/core/utils/dialog_helper.dart';
-import 'package:pp71/core/widgets/app_button.dart';
 
 void main() => runApp(const MaterialApp(home: PrivacyAgreementPage()));
 
@@ -175,6 +174,7 @@ class _PrivacyAgreementPageState extends State<PrivacyAgreementPage> {
 
   void _agree() {
     _storageService.setBool(StorageKeys.acceptedPrivacy, true);
+    _storageService.setBool(StorageKeys.usePrivacy, true);
     Navigator.of(context).pushReplacementNamed(RouteNames.onbording);
   }
 }

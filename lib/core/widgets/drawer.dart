@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:pp71/core/constants/settings_const.dart';
 import 'package:pp71/core/generated/assets.gen.dart';
 import 'package:pp71/core/utils/agreement_popup.dart';
-import 'package:pp71/core/utils/contact_dev.dart';
 import 'package:pp71/core/utils/dialog_helper.dart';
 import 'package:pp71/core/widgets/icon_button.dart';
 import 'package:pp71/core/widgets/rate_us.dart';
@@ -73,7 +72,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 title: 'About Us',
                 onPressed: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => SupportView()));
+                      MaterialPageRoute(builder: (context) => const SupportView()));
                   // showModalBottomSheet(
                   //   context: context,
                   //   isScrollControlled: true,
