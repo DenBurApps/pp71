@@ -15,7 +15,7 @@ class Routes {
         RouteNames.splash: (context) => const SplashPage(),
         RouteNames.pages: (context) => const Homeview(),
         RouteNames.support: (context) => const SupportView(),
-        RouteNames.privacyAgreement: (context) => const PrivacyAgreementPage(),
+        RouteNames.privacyAgreement: (context) => const PrivacyView(),
         RouteNames.onbording: (context) => const OnboardingView(),
       };
 }

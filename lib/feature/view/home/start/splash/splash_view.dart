@@ -9,11 +9,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get_it/get_it.dart';
 import 'package:in_app_review/in_app_review.dart';
+import 'package:pp71/core/config/remote_config.dart';
 import 'package:pp71/core/keys/storage_keys.dart';
 import 'package:pp71/core/routes/routes.dart';
 import 'package:pp71/core/storage/storage_service.dart';
 import 'package:pp71/core/utils/dialog_helper.dart';
-
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -24,7 +24,10 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPageState extends State<SplashPage> {
   final _storageService = GetIt.instance<StorageService>();
+  final _remoteConfigService = GetIt.instance<RemoteConfigService>();
   final _connectivity = Connectivity();
+
+  late bool usePrivacy;
 
   @override
   void initState() {
@@ -36,7 +39,7 @@ class _SplashPageState extends State<SplashPage> {
     await _initConnectivity(
       () async => await DialogHelper.showNoInternetDialog(context),
     );
-
+    usePrivacy = _remoteConfigService.getBool(ConfigKey.usePrivacy);
     _navigate();
   }
 
@@ -60,17 +63,13 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   Future<void> _navigate() async {
-    final usePrivacyAgreement =
-        _storageService.getBool(StorageKeys.usePrivacy) ?? false;
-    if (await InAppReview.instance.isAvailable()) {
-      await InAppReview.instance.requestReview();
-    }
-    if (usePrivacyAgreement) {
+    if (usePrivacy) {
       final seenOnboarding =
           _storageService.getBool(StorageKeys.seenOnboarding) ?? false;
-          
+
       if (!seenOnboarding) {
         Navigator.of(context).pushReplacementNamed(RouteNames.onbording);
+        InAppReview.instance.requestReview();
       } else {
         Navigator.of(context).pushReplacementNamed(RouteNames.pages);
       }
@@ -79,7 +78,6 @@ class _SplashPageState extends State<SplashPage> {
     }
     FlutterNativeSplash.remove();
   }
-
 
   @override
   Widget build(BuildContext context) {

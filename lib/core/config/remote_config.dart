@@ -17,7 +17,7 @@ class RemoteConfigService {
       await _remoteConfig.fetchAndActivate();
     } on Exception catch (e) {
       log('Failed to fetch remote config - $e');
-      FirebaseCrashlytics.instance 
+      FirebaseCrashlytics.instance
           .recordError('Failed to fetch remote config - $e', null);
     }
     return this;
@@ -29,5 +29,6 @@ class RemoteConfigService {
 }
 
 enum ConfigKey {
-  privacyLink
+  link,
+  usePrivacy,
 }
